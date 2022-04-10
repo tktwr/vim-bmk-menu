@@ -4,7 +4,7 @@
 "------------------------------------------------------
 " set global variables
 "------------------------------------------------------
-func! CpmInit()
+func! s:CpmInit()
   " set defaults
   let s:separator = "------------------------------"
   let s:cpm_key = "\<Space>"
@@ -203,13 +203,13 @@ func! CpmFilter(id, key)
   elseif a:key == 'l'
     call popup_close(a:id, 0)
     let nr = s:CpmNextNr()
-    let id = CpmOpen(w:cpm_menu_name, nr)
+    let id = cpm#CpmOpen(w:cpm_menu_name, nr)
     call s:CpmFixPos(id)
     return 1
   elseif a:key == 'h'
     call popup_close(a:id, 0)
     let nr = s:CpmPrevNr()
-    let id = CpmOpen(w:cpm_menu_name, nr)
+    let id = cpm#CpmOpen(w:cpm_menu_name, nr)
     call s:CpmFixPos(id)
     return 1
   elseif a:key == "\<C-CR>"
@@ -248,9 +248,9 @@ func! CpmHandler(id, result)
   endif
 endfunc
 
-func! CpmOpen(menu_name='', menu_nr=0)
+func! cpm#CpmOpen(menu_name='', menu_nr=0)
   if (!exists('s:cpm_menu_all'))
-    call CpmReload()
+    call cpm#CpmReload()
   endif
   let w:cpm_menu_name = s:CpmGetValidMenuName(a:menu_name)
   let w:cpm_menu_nr = a:menu_nr
@@ -271,8 +271,8 @@ endfunc
 "------------------------------------------------------
 " reload
 "------------------------------------------------------
-func! CpmReload()
-  call CpmInit()
+func! cpm#CpmReload()
+  call s:CpmInit()
 
   " menu_entry: cmd/dir/url
   let s:cpm_cmd_dict = {}

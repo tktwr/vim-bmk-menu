@@ -16,8 +16,8 @@ let g:loaded_bmk = 1
 command! -nargs=+ BmkEditDir   call BmkEditDir(<f-args>)
 command! -nargs=+ BmkEditFile  call BmkEditFile(<f-args>)
 
-command!          CpmReload    call CpmReload()
-command! -nargs=* CpmOpen      call CpmOpen(<f-args>)
+command!          CpmReload    call cpm#CpmReload()
+command! -nargs=* CpmOpen      call cpm#CpmOpen(<f-args>)
 
 "------------------------------------------------------
 " autocmd
@@ -31,4 +31,4 @@ augroup END
 "------------------------------------------------------
 " init
 "------------------------------------------------------
-call BmkInit()
+call bmk#BmkInit()

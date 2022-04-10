@@ -1,7 +1,7 @@
 "------------------------------------------------------
 " set global variables
 "------------------------------------------------------
-func BmkInit()
+func bmk#BmkInit()
   " set defaults
   let s:bmk_debug = 0
   let s:bmk_winwidth = 30
@@ -52,9 +52,9 @@ func BmkGetDirName(val)
   if type == "dir"
     let dir = val
   elseif type == "file"
-    let dir = TtGetDirName(val)
+    let dir = util#TtGetDirName(val)
   elseif type == "html"
-    let dir = TtGetDirName(val)
+    let dir = util#TtGetDirName(val)
   else
     let dir = ""
   endif
@@ -84,7 +84,7 @@ func BmkGetItem(line, idx)
   let line = a:line
   let line = matchstr(line, mx)
   let item = substitute(line, mx, '\'.a:idx, '')
-  let item = TtRemoveEndSpaces(item)
+  let item = util#TtRemoveEndSpaces(item)
   return item
 endfunc
 
@@ -163,7 +163,7 @@ func BmkEditFile(file, winnr)
   let winnr = TtFindEditor(a:winnr)
   call TtGotoWinnr(winnr)
 
-  let dir = TtGetDirName(file)
+  let dir = util#TtGetDirName(file)
   if &buftype == 'terminal'
     call BmkEditDirInTerm(dir)
   else
@@ -177,7 +177,7 @@ func BmkEditPDF(file, winnr)
   let winnr = TtFindEditor(a:winnr)
   call TtGotoWinnr(winnr)
 
-  let dir = TtGetDirName(file)
+  let dir = util#TtGetDirName(file)
   if &buftype == 'terminal'
     call BmkEditDirInTerm(dir)
   else
@@ -190,7 +190,7 @@ func BmkEditPDF(file, winnr)
     setlocal bufhidden=hide
     setlocal buflisted
     setlocal noswapfile
-    call TtPut0(out)
+    call util#TtPut0(out)
     normal 1G
   endif
 endfunc
