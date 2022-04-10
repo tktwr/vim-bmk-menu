@@ -147,7 +147,7 @@ endfunc
 
 func BmkEditDir(dir, winnr)
   let dir = expand(a:dir)
-  call TtGotoWinnr(a:winnr)
+  call vis#window#TtGotoWinnr(a:winnr)
 
   if &buftype == 'terminal'
     call BmkEditDirInTerm(dir)
@@ -161,7 +161,7 @@ endfunc
 func BmkEditFile(file, winnr)
   let file = expand(a:file)
   let winnr = TtFindEditor(a:winnr)
-  call TtGotoWinnr(winnr)
+  call vis#window#TtGotoWinnr(winnr)
 
   let dir = util#TtGetDirName(file)
   if &buftype == 'terminal'
@@ -175,7 +175,7 @@ endfunc
 func BmkEditPDF(file, winnr)
   let file = expand(a:file)
   let winnr = TtFindEditor(a:winnr)
-  call TtGotoWinnr(winnr)
+  call vis#window#TtGotoWinnr(winnr)
 
   let dir = util#TtGetDirName(file)
   if &buftype == 'terminal'
@@ -196,7 +196,7 @@ func BmkEditPDF(file, winnr)
 endfunc
 
 func BmkExecCommand(cmd, winnr)
-  call TtGotoWinnr(a:winnr)
+  call vis#window#TtGotoWinnr(a:winnr)
 
   let cmd = expand(a:cmd)
   let cmd = substitute(cmd, '<CR>', "\<CR>", '')

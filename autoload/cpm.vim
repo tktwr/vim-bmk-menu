@@ -158,7 +158,7 @@ func! s:CpmGetValidMenuName(name='')
     return name
   endif
 
-  if (TtInSideBar())
+  if (vis#sidebar#TtInSideBar())
     return 'buffer:side'
   else
     return 'buffer'
