@@ -19,7 +19,7 @@ endfunc
 "------------------------------------------------------
 " type
 "------------------------------------------------------
-func BmkUrlType(url)
+func bmk#BmkUrlType(url)
   let url = a:url
 
   if (match(url, 'http\|https') == 0)
@@ -45,9 +45,9 @@ func BmkUrlType(url)
   return type
 endfunc
 
-func BmkGetDirName(val)
+func bmk#BmkGetDirName(val)
   let val = a:val
-  let type = BmkUrlType(val)
+  let type = bmk#BmkUrlType(val)
 
   if type == "dir"
     let dir = val
@@ -70,7 +70,7 @@ endfunc
 "   space [-+] shortcut key    | val
 
 " return "title"
-func BmkGetTitle(line)
+func bmk#BmkGetTitle(line)
   let mx = '^\[\(.\+\)\].*'
   let line = a:line
   let line = matchstr(line, mx)
@@ -79,7 +79,7 @@ func BmkGetTitle(line)
 endfunc
 
 " return indexed item
-func BmkGetItem(line, idx)
+func bmk#BmkGetItem(line, idx)
   let mx = '[-+] \(.\+\)\s*|\s*\(.\+\)'
   let line = a:line
   let line = matchstr(line, mx)
@@ -89,20 +89,20 @@ func BmkGetItem(line, idx)
 endfunc
 
 " return "shortcut key"
-func BmkGetKeyItem()
+func bmk#BmkGetKeyItem()
   let line = getline('.')
-  return BmkGetItem(line, 1)
+  return bmk#BmkGetItem(line, 1)
 endfunc
 
 " return "val"
-func BmkGetValueItem()
+func bmk#BmkGetValueItem()
   let line = getline('.')
-  return BmkGetItem(line, 2)
+  return bmk#BmkGetItem(line, 2)
 endfunc
 
-func BmkGetExpandedValueItem()
+func bmk#BmkGetExpandedValueItem()
   let line = getline('.')
-  return expand(BmkGetItem(line, 2))
+  return expand(bmk#BmkGetItem(line, 2))
 endfunc
 
 "------------------------------------------------------
@@ -110,12 +110,12 @@ endfunc
 "------------------------------------------------------
 func s:BmkPrintItem()
   if s:bmk_debug
-    let key = BmkGetKeyItem()
-    let val = BmkGetExpandedValueItem()
-    let type = BmkUrlType(val)
+    let key = bmk#BmkGetKeyItem()
+    let val = bmk#BmkGetExpandedValueItem()
+    let type = bmk#BmkUrlType(val)
     echo "key=[".key."], val=[".val."], type=[".type."]"
   else
-    let key = BmkGetKeyItem()
+    let key = bmk#BmkGetKeyItem()
     if (len(key) > s:bmk_winwidth / 2)
       echo key
     else
@@ -137,7 +137,7 @@ endfunc
 "------------------------------------------------------
 " internal open
 "------------------------------------------------------
-func BmkEditDirInTerm(dir)
+func bmk#BmkEditDirInTerm(dir)
   if &buftype == 'terminal'
     exec "lcd" a:dir
     let bufnr = winbufnr(0)
@@ -145,12 +145,12 @@ func BmkEditDirInTerm(dir)
   endif
 endfunc
 
-func BmkEditDir(dir, winnr)
+func bmk#BmkEditDir(dir, winnr)
   let dir = expand(a:dir)
   call vis#window#TtGotoWinnr(a:winnr)
 
   if &buftype == 'terminal'
-    call BmkEditDirInTerm(dir)
+    call bmk#BmkEditDirInTerm(dir)
   else
     if s:bmk_edit_dir_func != ""
       exec printf('call %s("%s")', s:bmk_edit_dir_func, dir)
@@ -158,32 +158,32 @@ func BmkEditDir(dir, winnr)
   endif
 endfunc
 
-func BmkEditFile(file, winnr)
+func bmk#BmkEditFile(file, winnr)
   let file = expand(a:file)
-  let winnr = TtFindEditor(a:winnr)
+  let winnr = vis#window#TtFindEditor(a:winnr)
   call vis#window#TtGotoWinnr(winnr)
 
   let dir = util#TtGetDirName(file)
   if &buftype == 'terminal'
-    call BmkEditDirInTerm(dir)
+    call bmk#BmkEditDirInTerm(dir)
   else
     exec "lcd" dir
     exec "edit" file
   endif
 endfunc
 
-func BmkEditPDF(file, winnr)
+func bmk#BmkEditPDF(file, winnr)
   let file = expand(a:file)
-  let winnr = TtFindEditor(a:winnr)
+  let winnr = vis#window#TtFindEditor(a:winnr)
   call vis#window#TtGotoWinnr(winnr)
 
   let dir = util#TtGetDirName(file)
   if &buftype == 'terminal'
-    call BmkEditDirInTerm(dir)
+    call bmk#BmkEditDirInTerm(dir)
   else
     exec "lcd" dir
     let cmd = printf("pdftotext %s -", file)
-    let out = TtSystem(cmd)
+    let out = util#TtSystem(cmd)
     let cmd = printf("edit %s.txt", file)
     exec cmd
     setlocal buftype=nofile
@@ -195,7 +195,7 @@ func BmkEditPDF(file, winnr)
   endif
 endfunc
 
-func BmkExecCommand(cmd, winnr)
+func bmk#BmkExecCommand(cmd, winnr)
   call vis#window#TtGotoWinnr(a:winnr)
 
   let cmd = expand(a:cmd)
@@ -217,19 +217,19 @@ endfunc
 "------------------------------------------------------
 " external open
 "------------------------------------------------------
-func BmkOpenURL(url)
+func bmk#BmkOpenURL(url)
   let url = expand(a:url)
   exec "silent !chrome.sh" url
   redraw!
 endfunc
 
-func BmkOpenDir(url)
+func bmk#BmkOpenDir(url)
   let url = expand(a:url)
   exec "silent !explorer.sh" url
   redraw!
 endfunc
 
-func BmkOpenFile(url)
+func bmk#BmkOpenFile(url)
   let url = expand(a:url)
   exec "silent !vscode.sh" url
   redraw!
@@ -238,88 +238,88 @@ endfunc
 "------------------------------------------------------
 " action
 "------------------------------------------------------
-func BmkOpen(url, winnr)
+func bmk#BmkOpen(url, winnr)
   let url = expand(a:url)
-  let type = BmkUrlType(url)
+  let type = bmk#BmkUrlType(url)
 
   if (type == "http")
-    call BmkOpenURL(url)
+    call bmk#BmkOpenURL(url)
   elseif (type == "network")
-    call BmkOpenDir(url)
+    call bmk#BmkOpenDir(url)
   elseif (type == "dir")
-    call BmkOpenDir(url)
+    call bmk#BmkOpenDir(url)
   elseif (type == "file")
-    call BmkOpenFile(url)
+    call bmk#BmkOpenFile(url)
   elseif (type == "html")
-    call BmkOpenFile(url)
+    call bmk#BmkOpenFile(url)
   elseif (type == "pdf")
-    call BmkOpenURL(url)
+    call bmk#BmkOpenURL(url)
   elseif (type == "vim_command")
-    call BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecCommand(url, a:winnr)
   elseif (type == "term_command")
-    call BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecCommand(url, a:winnr)
   else
-    echo "BmkOpen: not supported type: [".type."]"
+    echo "bmk#BmkOpen: not supported type: [".type."]"
     return 0
   endif
 
   return 1
 endfunc
 
-func BmkView(url, winnr)
+func bmk#BmkView(url, winnr)
   let url = expand(a:url)
-  let type = BmkUrlType(url)
+  let type = bmk#BmkUrlType(url)
 
   if (type == "http")
-    call BmkOpenURL(url)
+    call bmk#BmkOpenURL(url)
   elseif (type == "network")
-    call BmkOpenDir(url)
+    call bmk#BmkOpenDir(url)
   elseif (type == "dir")
-    call BmkOpenDir(url)
+    call bmk#BmkOpenDir(url)
   elseif (type == "file")
-    call BmkOpenURL(url)
+    call bmk#BmkOpenURL(url)
   elseif (type == "html")
-    call BmkOpenURL(url)
+    call bmk#BmkOpenURL(url)
   elseif (type == "pdf")
-    call BmkOpenURL(url)
+    call bmk#BmkOpenURL(url)
   elseif (type == "vim_command")
-    call BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecCommand(url, a:winnr)
   elseif (type == "term_command")
-    call BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecCommand(url, a:winnr)
   else
-    echo "BmkView: not supported type: [".type."]"
+    echo "bmk#BmkView: not supported type: [".type."]"
     return 0
   endif
 
   return 1
 endfunc
 
-func BmkEdit(url, winnr)
+func bmk#BmkEdit(url, winnr)
   let url = expand(a:url)
-  let type = BmkUrlType(url)
+  let type = bmk#BmkUrlType(url)
 
   if s:bmk_debug
-    echom "BmkEdit: url=[".url."], type=[".type."]"
+    echom "bmk#BmkEdit: url=[".url."], type=[".type."]"
   endif
 
   if (type == "http")
-    call BmkOpenURL(url)
+    call bmk#BmkOpenURL(url)
   elseif (type == "network")
-    call BmkOpenDir(url)
+    call bmk#BmkOpenDir(url)
   elseif (type == "dir")
-    call BmkEditDir(url, a:winnr)
+    call bmk#BmkEditDir(url, a:winnr)
   elseif (type == "file")
-    call BmkEditFile(url, a:winnr)
+    call bmk#BmkEditFile(url, a:winnr)
   elseif (type == "html")
-    call BmkEditFile(url, a:winnr)
+    call bmk#BmkEditFile(url, a:winnr)
   elseif (type == "pdf")
-    call BmkEditPDF(url, a:winnr)
+    call bmk#BmkEditPDF(url, a:winnr)
   elseif (type == "vim_command")
-    call BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecCommand(url, a:winnr)
   elseif (type == "term_command")
-    call BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecCommand(url, a:winnr)
   else
-    echo "BmkEdit: not supported type: [".type."]"
+    echo "bmk#BmkEdit: not supported type: [".type."]"
     return 0
   endif
 
@@ -329,89 +329,89 @@ endfunc
 "------------------------------------------------------
 " action on bmk item
 "------------------------------------------------------
-func BmkOpenItem(winnr)
-  let val = BmkGetExpandedValueItem()
+func bmk#BmkOpenItem(winnr)
+  let val = bmk#BmkGetExpandedValueItem()
   if val == ""
     return
   endif
 
-  call BmkOpen(val, a:winnr)
+  call bmk#BmkOpen(val, a:winnr)
 endfunc
 
-func BmkViewItem(winnr)
-  let val = BmkGetExpandedValueItem()
+func bmk#BmkViewItem(winnr)
+  let val = bmk#BmkGetExpandedValueItem()
   if val == ""
     return
   endif
 
-  call BmkView(val, a:winnr)
+  call bmk#BmkView(val, a:winnr)
 endfunc
 
-func BmkEditItem(winnr)
-  let val = BmkGetExpandedValueItem()
+func bmk#BmkEditItem(winnr)
+  let val = bmk#BmkGetExpandedValueItem()
   if val == ""
     return
   endif
 
-  call BmkEdit(val, a:winnr)
+  call bmk#BmkEdit(val, a:winnr)
 endfunc
 
-func BmkPreviewItem(winnr)
+func bmk#BmkPreviewItem(winnr)
   let prev_winnr = winnr()
-  call BmkEditItem(a:winnr)
+  call bmk#BmkEditItem(a:winnr)
   exec prev_winnr."wincmd w"
 endfunc
 
 "------------------------------------------------------
 " action on <cfile> or the current buffer
 "------------------------------------------------------
-func BmkOpenThis()
+func bmk#BmkOpenThis()
   let val = expand("<cfile>")
 
-  let r = BmkOpen(val, 0)
+  let r = bmk#BmkOpen(val, 0)
   if !r
-    call BmkOpenFile('%:p')
+    call bmk#BmkOpenFile('%:p')
   endif
 endfunc
 
-func BmkViewThis()
+func bmk#BmkViewThis()
   let val = expand("<cfile>")
 
-  let r = BmkView(val, 0)
+  let r = bmk#BmkView(val, 0)
   if !r
-    call BmkOpenURL('%:p')
+    call bmk#BmkOpenURL('%:p')
   endif
 endfunc
 
 "------------------------------------------------------
 " map
 "------------------------------------------------------
-func BmkMapWin()
+func bmk#BmkMapWin()
   if &filetype != "bmk"
     return
   endif
 
-  if (TtInSideBar())
-    nnoremap <silent> <buffer> <CR>    :call BmkEditItem(-2)<CR>
-    nnoremap <silent> <buffer> <C-CR>  :call BmkViewItem(-2)<CR>
-    nnoremap <silent> <buffer> <S-CR>  :call BmkOpenItem(-2)<CR>
+  if (vis#sidebar#TtInSideBar())
+    nnoremap <silent> <buffer> <CR>    :call bmk#BmkEditItem(-2)<CR>
+    nnoremap <silent> <buffer> <C-CR>  :call bmk#BmkViewItem(-2)<CR>
+    nnoremap <silent> <buffer> <S-CR>  :call bmk#BmkOpenItem(-2)<CR>
 
-    nnoremap <silent> <buffer> l       :call BmkPreviewItem(-2)<CR>
+    nnoremap <silent> <buffer> l       :call bmk#BmkPreviewItem(-2)<CR>
     nnoremap <silent> <buffer> j       :call <SID>BmkNextItem()<CR>
     nnoremap <silent> <buffer> k       :call <SID>BmkPrevItem()<CR>
 
-    nnoremap <silent> <buffer> 2       :call BmkEditItem(2)<CR>
-    nnoremap <silent> <buffer> 3       :call BmkEditItem(3)<CR>
-    nnoremap <silent> <buffer> 4       :call BmkEditItem(4)<CR>
-    nnoremap <silent> <buffer> 5       :call BmkEditItem(5)<CR>
-    nnoremap <silent> <buffer> 6       :call BmkEditItem(6)<CR>
-    nnoremap <silent> <buffer> 7       :call BmkEditItem(7)<CR>
-    nnoremap <silent> <buffer> 8       :call BmkEditItem(8)<CR>
-    nnoremap <silent> <buffer> 9       :call BmkEditItem(9)<CR>
+    nnoremap <silent> <buffer> 2       :call bmk#BmkEditItem(2)<CR>
+    nnoremap <silent> <buffer> 3       :call bmk#BmkEditItem(3)<CR>
+    nnoremap <silent> <buffer> 4       :call bmk#BmkEditItem(4)<CR>
+    nnoremap <silent> <buffer> 5       :call bmk#BmkEditItem(5)<CR>
+    nnoremap <silent> <buffer> 6       :call bmk#BmkEditItem(6)<CR>
+    nnoremap <silent> <buffer> 7       :call bmk#BmkEditItem(7)<CR>
+    nnoremap <silent> <buffer> 8       :call bmk#BmkEditItem(8)<CR>
+    nnoremap <silent> <buffer> 9       :call bmk#BmkEditItem(9)<CR>
   else
-    nnoremap <silent> <buffer> <CR>    :call BmkEditItem(0)<CR>
-    nnoremap <silent> <buffer> <C-CR>  :call BmkViewItem(0)<CR>
-    nnoremap <silent> <buffer> <S-CR>  :call BmkOpenItem(0)<CR>
+    nnoremap <silent> <buffer> <CR>    :call bmk#BmkEditItem(0)<CR>
+    nnoremap <silent> <buffer> <C-CR>  :call bmk#BmkViewItem(0)<CR>
+    nnoremap <silent> <buffer> <S-CR>  :call bmk#BmkOpenItem(0)<CR>
     if maparg('l') != ""
       nunmap <buffer> l
       nunmap <buffer> k
@@ -428,7 +428,7 @@ func BmkMapWin()
   endif
 endfunc
 
-func BmkToggleDebug()
+func bmk#BmkToggleDebug()
   let s:bmk_debug = !s:bmk_debug
 endfunc
 

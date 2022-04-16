@@ -75,8 +75,8 @@ endfunc
 
 func! s:CpmRegister(list, dict, line)
   let line = a:line
-  let key = BmkGetItem(line, 1)
-  let val = BmkGetItem(line, 2)
+  let key = bmk#BmkGetItem(line, 1)
+  let val = bmk#BmkGetItem(line, 2)
 
   let key = " ".key." "
 
@@ -94,7 +94,7 @@ func! s:CpmLoad(cmd_file)
   for line in lines
     if (match(line, '^\[.\+\]') == 0)
       " title
-      let title = BmkGetTitle(line)
+      let title = bmk#BmkGetTitle(line)
 
       let menu = []
       let s:cpm_menu_all[title] = menu
@@ -192,7 +192,7 @@ func! s:CpmFixPos(id)
   \ })
 endfunc
 
-func! CpmFilter(id, key)
+func! cpm#CpmFilter(id, key)
   let w:edit_type = 0
   if a:key == s:cpm_key || a:key == s:cpm_term_key
     call popup_close(a:id, 0)
@@ -229,7 +229,7 @@ func! CpmFilter(id, key)
   return popup_filter_menu(a:id, a:key)
 endfunc
 
-func! CpmHandler(id, result)
+func! cpm#CpmHandler(id, result)
   if a:result == 0
   elseif a:result > 0
     let idx = a:result - 1
@@ -239,11 +239,11 @@ func! CpmHandler(id, result)
     let cmd = expand(cmd)
 
     if w:edit_type == 0
-      call BmkEdit(cmd, 0)
+      call bmk#BmkEdit(cmd, 0)
     elseif w:edit_type == 1
-      call BmkView(cmd, 0)
+      call bmk#BmkView(cmd, 0)
     elseif w:edit_type == 2
-      call BmkOpen(cmd, 0)
+      call bmk#BmkOpen(cmd, 0)
     endif
   endif
 endfunc
@@ -256,8 +256,8 @@ func! cpm#CpmOpen(menu_name='', menu_nr=0)
   let w:cpm_menu_nr = a:menu_nr
   let w:cpm_menu = s:CpmGetMenu(w:cpm_menu_name, w:cpm_menu_nr)
   let winid = popup_menu(w:cpm_menu, #{
-    \ filter: 'CpmFilter',
-    \ callback: 'CpmHandler',
+    \ filter: 'cpm#CpmFilter',
+    \ callback: 'cpm#CpmHandler',
     \ border: [0,0,0,0],
     \ padding: [0,0,0,0],
     \ pos: 'botleft',
