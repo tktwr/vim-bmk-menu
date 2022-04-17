@@ -52,9 +52,9 @@ func bmk#BmkGetDirName(val)
   if type == "dir"
     let dir = val
   elseif type == "file"
-    let dir = util#TtGetDirName(val)
+    let dir = bmk#util#TtGetDirName(val)
   elseif type == "html"
-    let dir = util#TtGetDirName(val)
+    let dir = bmk#util#TtGetDirName(val)
   else
     let dir = ""
   endif
@@ -84,7 +84,7 @@ func bmk#BmkGetItem(line, idx)
   let line = a:line
   let line = matchstr(line, mx)
   let item = substitute(line, mx, '\'.a:idx, '')
-  let item = util#TtRemoveEndSpaces(item)
+  let item = bmk#util#TtRemoveEndSpaces(item)
   return item
 endfunc
 
@@ -163,7 +163,7 @@ func bmk#BmkEditFile(file, winnr)
   let winnr = vis#window#TtFindEditor(a:winnr)
   call vis#window#TtGotoWinnr(winnr)
 
-  let dir = util#TtGetDirName(file)
+  let dir = bmk#util#TtGetDirName(file)
   if &buftype == 'terminal'
     call bmk#BmkEditDirInTerm(dir)
   else
@@ -177,20 +177,20 @@ func bmk#BmkEditPDF(file, winnr)
   let winnr = vis#window#TtFindEditor(a:winnr)
   call vis#window#TtGotoWinnr(winnr)
 
-  let dir = util#TtGetDirName(file)
+  let dir = bmk#util#TtGetDirName(file)
   if &buftype == 'terminal'
     call bmk#BmkEditDirInTerm(dir)
   else
     exec "lcd" dir
     let cmd = printf("pdftotext %s -", file)
-    let out = util#TtSystem(cmd)
+    let out = bmk#util#TtSystem(cmd)
     let cmd = printf("edit %s.txt", file)
     exec cmd
     setlocal buftype=nofile
     setlocal bufhidden=hide
     setlocal buflisted
     setlocal noswapfile
-    call util#TtPut0(out)
+    call bmk#util#TtPut0(out)
     normal 1G
   endif
 endfunc

@@ -1,9 +1,9 @@
 "======================================================
 " Bmk
 "======================================================
-if v:version < 802
-  finish
-endif
+"if v:version < 802
+"  finish
+"endif
 
 if exists("g:loaded_bmk")
   finish
