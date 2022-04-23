@@ -11,11 +11,8 @@ endif
 let g:loaded_bmk = 1
 
 "------------------------------------------------------
-" command for bmk
+" public func
 "------------------------------------------------------
-command! -nargs=+ BmkEditDir   call bmk#BmkEditDir(<f-args>)
-command! -nargs=+ BmkEditFile  call bmk#BmkEditFile(<f-args>)
-
 func BmkEditDir(dir, winnr)
   call bmk#BmkEditDir(a:dir, a:winnr)
 endfunc
@@ -23,6 +20,36 @@ endfunc
 func BmkEditFile(file, winnr)
   call bmk#BmkEditFile(a:file, a:winnr)
 endfunc
+
+func BmkOpenURL(url)
+  call bmk#BmkOpenURL(a:url)
+endfunc
+
+func BmkOpenFile(url)
+  call bmk#BmkOpenFile(a:url)
+endfunc
+
+func BmkOpenDir(url)
+  call bmk#BmkOpenDir(a:url)
+endfunc
+
+func BmkViewThis()
+  call bmk#BmkViewThis()
+endfunc
+
+func BmkOpenThis()
+  call bmk#BmkOpenThis()
+endfunc
+
+func BmkToggleDebug()
+  call bmk#BmkToggleDebug()
+endfunc
+
+"------------------------------------------------------
+" command for bmk
+"------------------------------------------------------
+command! -nargs=+ BmkEditDir   call bmk#BmkEditDir(<f-args>)
+command! -nargs=+ BmkEditFile  call bmk#BmkEditFile(<f-args>)
 
 "------------------------------------------------------
 " command for cpm
