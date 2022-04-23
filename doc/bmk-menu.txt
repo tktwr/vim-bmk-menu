@@ -1,4 +1,4 @@
-*bmk-menu.txt*
+*bmk-menu.txt* a user defined popup menu specified in bookmark files
 
 Author  : Takehiro Tawara
 License : MIT license
@@ -7,25 +7,22 @@ License : MIT license
 INTRODUCTION                                       *bmk-menu-introduction*
 
 bmk-menu is a user defined popup menu specified in bookmark files.
+
+==========================================================================
+INSTALL                                                 *bmk-menu-install*
+
+For vim-plug, install the plugin as follows.
+>
+        Plug 'tktwr/vim-bmk-menu'
+<
+==========================================================================
+SETTING                                                 *bmk-menu-setting*
+
+Set mappings.
 >
         nnoremap <silent> <Space>    <C-W>:CpmOpen<CR>
         tnoremap <silent> <C-Space>  <C-W>:CpmOpen<CR>
 <
-==========================================================================
-COMMAND                                                 *bmk-menu-command*
-
-:CpmOpen
-        Open a bookmark menu.
-
-:CpmReload
-        Reload the bookmark menu.
-
-:BmkEditDir {dir} {winnr}
-        Edit a directory in the window winnr.
-
-:BmkEditFile {file} {winnr}
-        Edit a file in the window winnr.
-
 ==========================================================================
 VARIABLE                                               *bmk-menu-variable*
 
@@ -57,5 +54,20 @@ VARIABLE                                               *bmk-menu-variable*
           \ 'ft:fern'     : ['cmd.fern', 'local.bmk.dir'],
           \ }
 <
+==========================================================================
+COMMAND                                                 *bmk-menu-command*
+
+:CpmOpen
+        Open a bookmark menu.
+
+:CpmReload
+        Reload the bookmark menu.
+
+:BmkEditDir {dir} {winnr}
+        Edit a directory in the window winnr.
+
+:BmkEditFile {file} {winnr}
+        Edit a file in the window winnr.
+
 ==========================================================================
 vim:tw=78:ft=help:norl:
