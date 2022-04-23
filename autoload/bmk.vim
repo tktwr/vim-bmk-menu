@@ -38,8 +38,10 @@ func bmk#BmkUrlType(url)
     let type = "dir"
   elseif (filereadable(url))
     let type = "file"
-  else
+  elseif (match(url, '^> ') == 0)
     let type = "term_command"
+  else
+    let type = "no_match"
   endif
 
   return type
@@ -195,23 +197,34 @@ func bmk#BmkEditPDF(file, winnr)
   endif
 endfunc
 
-func bmk#BmkExecCommand(cmd, winnr)
+func bmk#BmkExecVimCommand(cmd, winnr)
   call vis#window#TtGotoWinnr(a:winnr)
 
   let cmd = expand(a:cmd)
-  let cmd = substitute(cmd, '<CR>', "\<CR>", '')
   let cmd = substitute(cmd, '_Plug_', "\<Plug>", '')
 
-  if &buftype == 'terminal'
-    let bufnr = winbufnr(0)
-    call term_sendkeys(bufnr, cmd)
+  if (cmd[0] == ':')
+    exec cmd[1:]
   else
-    if (cmd[0] == ':')
-      exec cmd[1:]
-    else
-      call feedkeys(cmd)
-    endif
+    call feedkeys(cmd)
   endif
+endfunc
+
+func bmk#BmkExecTermCommand(cmd, winnr)
+  call vis#window#TtGotoWinnr(a:winnr)
+
+  if &buftype != 'terminal'
+    return
+  endif
+
+  let cmd = expand(a:cmd)
+  let cmd = substitute(cmd, '<CR>', "\<CR>", '')
+  if (match(cmd, '^> ') == 0)
+    let cmd = cmd[2:]
+  endif
+
+  let bufnr = winbufnr(0)
+  call term_sendkeys(bufnr, cmd)
 endfunc
 
 "------------------------------------------------------
@@ -255,9 +268,9 @@ func bmk#BmkOpen(url, winnr)
   elseif (type == "pdf")
     call bmk#BmkOpenURL(url)
   elseif (type == "vim_command")
-    call bmk#BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecVimCommand(url, a:winnr)
   elseif (type == "term_command")
-    call bmk#BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecTermCommand(url, a:winnr)
   else
     echo "bmk#BmkOpen: not supported type: [".type."]"
     return 0
@@ -283,9 +296,9 @@ func bmk#BmkView(url, winnr)
   elseif (type == "pdf")
     call bmk#BmkOpenURL(url)
   elseif (type == "vim_command")
-    call bmk#BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecVimCommand(url, a:winnr)
   elseif (type == "term_command")
-    call bmk#BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecTermCommand(url, a:winnr)
   else
     echo "bmk#BmkView: not supported type: [".type."]"
     return 0
@@ -315,9 +328,9 @@ func bmk#BmkEdit(url, winnr)
   elseif (type == "pdf")
     call bmk#BmkEditPDF(url, a:winnr)
   elseif (type == "vim_command")
-    call bmk#BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecVimCommand(url, a:winnr)
   elseif (type == "term_command")
-    call bmk#BmkExecCommand(url, a:winnr)
+    call bmk#BmkExecTermCommand(url, a:winnr)
   else
     echo "bmk#BmkEdit: not supported type: [".type."]"
     return 0
