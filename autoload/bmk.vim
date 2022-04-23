@@ -54,9 +54,9 @@ func bmk#BmkGetDirName(val)
   if type == "dir"
     let dir = val
   elseif type == "file"
-    let dir = bmk#util#TtGetDirName(val)
+    let dir = bmk#util#BmkGetDirName(val)
   elseif type == "html"
-    let dir = bmk#util#TtGetDirName(val)
+    let dir = bmk#util#BmkGetDirName(val)
   else
     let dir = ""
   endif
@@ -86,7 +86,7 @@ func bmk#BmkGetItem(line, idx)
   let line = a:line
   let line = matchstr(line, mx)
   let item = substitute(line, mx, '\'.a:idx, '')
-  let item = bmk#util#TtRemoveEndSpaces(item)
+  let item = bmk#util#BmkRemoveEndSpaces(item)
   return item
 endfunc
 
@@ -149,7 +149,7 @@ endfunc
 
 func bmk#BmkEditDir(dir, winnr)
   let dir = expand(a:dir)
-  call vis#window#TtGotoWinnr(a:winnr)
+  call vis#window#VisGotoWinnr(a:winnr)
 
   if &buftype == 'terminal'
     call bmk#BmkEditDirInTerm(dir)
@@ -162,10 +162,10 @@ endfunc
 
 func bmk#BmkEditFile(file, winnr)
   let file = expand(a:file)
-  let winnr = vis#window#TtFindEditor(a:winnr)
-  call vis#window#TtGotoWinnr(winnr)
+  let winnr = vis#window#VisFindEditor(a:winnr)
+  call vis#window#VisGotoWinnr(winnr)
 
-  let dir = bmk#util#TtGetDirName(file)
+  let dir = bmk#util#BmkGetDirName(file)
   if &buftype == 'terminal'
     call bmk#BmkEditDirInTerm(dir)
   else
@@ -176,29 +176,29 @@ endfunc
 
 func bmk#BmkEditPDF(file, winnr)
   let file = expand(a:file)
-  let winnr = vis#window#TtFindEditor(a:winnr)
-  call vis#window#TtGotoWinnr(winnr)
+  let winnr = vis#window#VisFindEditor(a:winnr)
+  call vis#window#VisGotoWinnr(winnr)
 
-  let dir = bmk#util#TtGetDirName(file)
+  let dir = bmk#util#BmkGetDirName(file)
   if &buftype == 'terminal'
     call bmk#BmkEditDirInTerm(dir)
   else
     exec "lcd" dir
     let cmd = printf("pdftotext %s -", file)
-    let out = bmk#util#TtSystem(cmd)
+    let out = bmk#util#BmkSystem(cmd)
     let cmd = printf("edit %s.txt", file)
     exec cmd
     setlocal buftype=nofile
     setlocal bufhidden=hide
     setlocal buflisted
     setlocal noswapfile
-    call bmk#util#TtPut0(out)
+    call bmk#util#BmkPut0(out)
     normal 1G
   endif
 endfunc
 
 func bmk#BmkExecVimCommand(cmd, winnr)
-  call vis#window#TtGotoWinnr(a:winnr)
+  call vis#window#VisGotoWinnr(a:winnr)
 
   let cmd = expand(a:cmd)
   let cmd = substitute(cmd, '_Plug_', "\<Plug>", '')
@@ -211,7 +211,7 @@ func bmk#BmkExecVimCommand(cmd, winnr)
 endfunc
 
 func bmk#BmkExecTermCommand(cmd, winnr)
-  call vis#window#TtGotoWinnr(a:winnr)
+  call vis#window#VisGotoWinnr(a:winnr)
 
   if &buftype != 'terminal'
     return
@@ -404,7 +404,7 @@ func bmk#BmkMapWin()
     return
   endif
 
-  if (vis#sidebar#TtInSideBar())
+  if (vis#sidebar#VisInSideBar())
     nnoremap <silent> <buffer> <CR>    :call bmk#BmkEditItem(-2)<CR>
     nnoremap <silent> <buffer> <C-CR>  :call bmk#BmkViewItem(-2)<CR>
     nnoremap <silent> <buffer> <S-CR>  :call bmk#BmkOpenItem(-2)<CR>

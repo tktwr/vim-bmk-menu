@@ -1,38 +1,38 @@
 "------------------------------------------------------
 " util
 "------------------------------------------------------
-func bmk#util#TtGetDirName(filepath)
+func bmk#util#BmkGetDirName(filepath)
   return substitute(a:filepath, "/[^/]*$", "", "")
 endfunc
 
 "------------------------------------------------------
 " buffer
 "------------------------------------------------------
-func bmk#util#TtClear()
+func bmk#util#BmkClear()
   silent %d _
 endfunc
 
-func bmk#util#TtPut0(text)
+func bmk#util#BmkPut0(text)
   silent 0put =a:text
 endfunc
 
-func bmk#util#TtPut(text)
+func bmk#util#BmkPut(text)
   silent put =a:text
 endfunc
 
-func bmk#util#TtRemoveBeginSpaces(line)
+func bmk#util#BmkRemoveBeginSpaces(line)
   return substitute(a:line, '^\s*', '', '')
 endfunc
 
-func bmk#util#TtRemoveEndSpaces(line)
+func bmk#util#BmkRemoveEndSpaces(line)
   return substitute(a:line, '\s*$', '', '')
 endfunc
 
-func bmk#util#TtRemoveBeginEndSpaces(line)
-  return bmk#util#TtRemoveBeginSpaces(bmk#util#TtRemoveEndSpaces(a:line))
+func bmk#util#BmkRemoveBeginEndSpaces(line)
+  return bmk#util#BmkRemoveBeginSpaces(bmk#util#BmkRemoveEndSpaces(a:line))
 endfunc
 
-func bmk#util#TtSystem(cmd)
+func bmk#util#BmkSystem(cmd)
   let out = system(a:cmd)
   return substitute(out, "\<CR>", '', 'g')
 endfunc
