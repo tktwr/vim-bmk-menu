@@ -2,12 +2,13 @@
 - E IDE                                | :VisIDE
 - I VisWinInitSize                     | :VisWinInitSize
 - < SideBar                            | :VisSideBarToggle
-- > TagBar                             | :VisTagbarToggle
 - D Fern                               | :VisFernDrawer %:p:h
 - N Editor                             | :new
 - T Term                               | :VisTerm
-- X Wx                                 | :Wx ?
 - C VisIDESendCdE2T                    | :VisIDESendCdE2T
+-   VisCheckEnv                        | :VisCheckEnv
+-   VisWinInfo                         | :VisWinInfo
+- H Help                               | :VisHelp
 [cmd.term] --------------------------- | ----------------------------------------
 - I VisWinInitSize                     | :VisWinInitSize
 
