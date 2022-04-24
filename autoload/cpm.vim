@@ -9,7 +9,7 @@ func cpm#CpmInit()
   let s:separator = "------------------------------"
   let s:cpm_key = "\<Space>"
   let s:cpm_term_key = "\<C-Space>"
-  let s:cpm_plugin_dir = expand('$MY_VIM/plugged/vim-bmk-menu/')
+  let s:cpm_plugin_dir = expand('<sfile>:p:h:h')."/"
   let s:cpm_files = [
     \ s:cpm_plugin_dir."bmk/cmd.txt",
     \ s:cpm_plugin_dir."bmk/bmk.txt",
