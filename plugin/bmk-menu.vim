@@ -70,3 +70,4 @@ augroup END
 " init
 "------------------------------------------------------
 call bmk#BmkInit()
+call cpm#CpmInit()

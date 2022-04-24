@@ -2,20 +2,31 @@
 " Custom Popup Menu
 "======================================================
 "------------------------------------------------------
-" set global variables
+" init
 "------------------------------------------------------
-func! s:CpmInit()
+func cpm#CpmInit()
   " set defaults
   let s:separator = "------------------------------"
   let s:cpm_key = "\<Space>"
   let s:cpm_term_key = "\<C-Space>"
-  let s:cpm_files = []
+  let s:cpm_plugin_dir = expand('$MY_VIM/plugged/vim-bmk-menu/')
+  let s:cpm_files = [
+    \ s:cpm_plugin_dir."bmk/cmd.txt",
+    \ s:cpm_plugin_dir."bmk/bmk.txt",
+    \ ]
   let s:cpm_titles = {
-    \ 'buffer': [],
-    \ 'terminal': [],
+    \ 'terminal' : ['cmd.term'],
+    \ 'buffer'   : ['cmd.buf'],
+    \ 'ft:fern'  : ['bmk.dir'],
     \ }
 
-  " set global variables
+  call cpm#CpmSetting()
+endfunc
+
+func cpm#CpmSetting()
+  "------------------------------------------------------
+  " user defined global variables
+  "------------------------------------------------------
   if exists("g:cpm_key")
     let s:cpm_key = g:cpm_key
   endif
@@ -272,7 +283,8 @@ endfunc
 " reload
 "------------------------------------------------------
 func! cpm#CpmReload()
-  call s:CpmInit()
+  call bmk#BmkSetting()
+  call cpm#CpmSetting()
 
   " menu_entry: cmd/dir/url
   let s:cpm_cmd_dict = {}

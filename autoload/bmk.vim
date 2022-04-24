@@ -1,5 +1,5 @@
 "------------------------------------------------------
-" set global variables
+" init
 "------------------------------------------------------
 func bmk#BmkInit()
   " set defaults
@@ -7,10 +7,24 @@ func bmk#BmkInit()
   let s:bmk_winwidth = 30
   let s:bmk_edit_dir_func = ""
 
-  " set global variables
+  call bmk#BmkSetting()
+endfunc
+
+func bmk#BmkSetting()
+  "------------------------------------------------------
+  " aux funcs
+  "------------------------------------------------------
+  if exists("*VisFern")
+    let s:bmk_edit_dir_func = "VisFern"
+  endif
+
+  "------------------------------------------------------
+  " user defined global variables
+  "------------------------------------------------------
   if exists("g:bmk_winwidth")
     let s:bmk_winwidth = g:bmk_winwidth
   endif
+
   if exists("g:bmk_edit_dir_func")
     let s:bmk_edit_dir_func = g:bmk_edit_dir_func
   endif

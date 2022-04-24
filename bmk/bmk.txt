@@ -1,0 +1,6 @@
+[bmk.dir] ---------------------------- | ----------------------------------------
+-   C:/                                | C:/
+-   Desktop/                           | $HOME/Desktop/
+-   Downloads/                         | $HOME/Downloads/
+
+# vim:set ft=bmk syntax=txt nowrap:
