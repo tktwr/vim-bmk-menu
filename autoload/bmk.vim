@@ -55,7 +55,7 @@ func bmk#BmkUrlType(url)
   elseif (match(url, '^> ') == 0)
     let type = "term_command"
   else
-    let type = "no_match"
+    let type = "vim_normal"
   endif
 
   return type
@@ -281,7 +281,7 @@ func bmk#BmkOpen(url, winnr)
     call bmk#BmkOpenFile(url)
   elseif (type == "pdf")
     call bmk#BmkOpenURL(url)
-  elseif (type == "vim_command")
+  elseif (type == "vim_command" || type == "vim_normal")
     call bmk#BmkExecVimCommand(url, a:winnr)
   elseif (type == "term_command")
     call bmk#BmkExecTermCommand(url, a:winnr)
@@ -309,7 +309,7 @@ func bmk#BmkView(url, winnr)
     call bmk#BmkOpenURL(url)
   elseif (type == "pdf")
     call bmk#BmkOpenURL(url)
-  elseif (type == "vim_command")
+  elseif (type == "vim_command" || type == "vim_normal")
     call bmk#BmkExecVimCommand(url, a:winnr)
   elseif (type == "term_command")
     call bmk#BmkExecTermCommand(url, a:winnr)
@@ -341,7 +341,7 @@ func bmk#BmkEdit(url, winnr)
     call bmk#BmkEditFile(url, a:winnr)
   elseif (type == "pdf")
     call bmk#BmkEditPDF(url, a:winnr)
-  elseif (type == "vim_command")
+  elseif (type == "vim_command" || type == "vim_normal")
     call bmk#BmkExecVimCommand(url, a:winnr)
   elseif (type == "term_command")
     call bmk#BmkExecTermCommand(url, a:winnr)
