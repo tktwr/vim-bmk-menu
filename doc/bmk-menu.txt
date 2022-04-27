@@ -13,7 +13,9 @@ INSTALL                                                 *bmk-menu-install*
 
 For vim-plug, install the plugin as follows.
 >
+        Plug 'tktwr/vim-winbuf-menu'
         Plug 'tktwr/vim-bmk-menu'
+        Plug 'tktwr/vim-ide-style'
 <
 ==========================================================================
 SETTING                                                 *bmk-menu-setting*
