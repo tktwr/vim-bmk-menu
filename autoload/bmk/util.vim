@@ -2,6 +2,9 @@
 " util
 "------------------------------------------------------
 func bmk#util#BmkGetDirName(filepath)
+  if (isdirectory(a:filepath))
+    return a:filepath
+  endif
   return substitute(a:filepath, "/[^/]*$", "", "")
 endfunc
 

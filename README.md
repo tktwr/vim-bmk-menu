@@ -1,11 +1,10 @@
-# bmk-menu.vim
+# vim-bmk-menu
 
-bmk-menu is a user defined popup menu specified in bookmark files.
+vim-bmk-menu is a user defined popup menu specified in bookmark files.
 
 ## Install
 
 ~~~
-Plug 'tktwr/vim-winbuf-menu'
 Plug 'tktwr/vim-bmk-menu'
 Plug 'tktwr/vim-ide-style'
 ~~~
