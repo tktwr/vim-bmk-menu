@@ -6,6 +6,9 @@ func bmk#BmkInit()
   let s:bmk_debug = 0
   let s:bmk_winwidth = 30
   let s:bmk_edit_dir_func = ""
+  let s:bmk_open_url_prog = "default_explorer.sh"
+  let s:bmk_open_dir_prog = "default_explorer.sh"
+  let s:bmk_open_file_prog = "default_explorer.sh"
 
   call bmk#BmkSetting()
 endfunc
@@ -24,9 +27,17 @@ func bmk#BmkSetting()
   if exists("g:bmk_winwidth")
     let s:bmk_winwidth = g:bmk_winwidth
   endif
-
   if exists("g:bmk_edit_dir_func")
     let s:bmk_edit_dir_func = g:bmk_edit_dir_func
+  endif
+  if exists("g:bmk_open_url_prog")
+    let s:bmk_open_url_prog = g:bmk_open_url_prog
+  endif
+  if exists("g:bmk_open_dir_prog")
+    let s:bmk_open_dir_prog = g:bmk_open_dir_prog
+  endif
+  if exists("g:bmk_open_file_prog")
+    let s:bmk_open_file_prog = g:bmk_open_file_prog
   endif
 endfunc
 
@@ -48,12 +59,12 @@ func bmk#BmkUrlType(url)
     let type = "network"
   elseif (match(url, '^:') == 0)
     let type = "vim_command"
+  elseif (match(url, '^> ') == 0)
+    let type = "term_command"
   elseif (isdirectory(url))
     let type = "dir"
   elseif (filereadable(url))
     let type = "file"
-  elseif (match(url, '^> ') == 0)
-    let type = "term_command"
   else
     let type = "vim_normal"
   endif
@@ -70,6 +81,8 @@ func bmk#BmkGetDirName(val)
   elseif type == "file"
     let dir = bmk#util#BmkGetDirName(val)
   elseif type == "html"
+    let dir = bmk#util#BmkGetDirName(val)
+  elseif type == "pdf"
     let dir = bmk#util#BmkGetDirName(val)
   else
     let dir = ""
@@ -246,19 +259,19 @@ endfunc
 "------------------------------------------------------
 func bmk#BmkOpenURL(url)
   let url = expand(a:url)
-  exec "silent !chrome.sh" url
+  exec printf("silent !%s %s", s:bmk_open_url_prog, url)
   redraw!
 endfunc
 
 func bmk#BmkOpenDir(url)
   let url = expand(a:url)
-  exec "silent !explorer.sh" url
+  exec printf("silent !%s %s", s:bmk_open_dir_prog, url)
   redraw!
 endfunc
 
 func bmk#BmkOpenFile(url)
   let url = expand(a:url)
-  exec "silent !vscode.sh" url
+  exec printf("silent !%s %s", s:bmk_open_file_prog, url)
   redraw!
 endfunc
 
