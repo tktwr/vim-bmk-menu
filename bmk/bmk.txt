@@ -1,6 +1,9 @@
 [bmk.dir] ---------------------------- | ----------------------------------------
 -   C:/                                | C:/
+-   C:/Program Files/                  | C:/Program Files/
 -   Desktop/                           | $HOME/Desktop/
 -   Downloads/                         | $HOME/Downloads/
+[links] ------------------------------ | ----------------------------------------
+-   vim-bmk-menu                       | https://github.com/tktwr/vim-bmk-menu
 
 # vim:set ft=bmk syntax=txt nowrap:

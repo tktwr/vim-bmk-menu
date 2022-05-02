@@ -15,8 +15,8 @@ func cpm#CpmInit()
     \ s:cpm_plugin_dir."bmk/bmk.txt",
     \ ]
   let s:cpm_titles = {
-    \ 'terminal' : ['cmd.term'],
-    \ 'buffer'   : ['cmd.buf'],
+    \ 'terminal' : ['cmd.term', 'cmd.git'],
+    \ 'buffer'   : ['cmd.buf & cmd.sys', 'links'],
     \ 'ft:fern'  : ['bmk.dir'],
     \ }
 
