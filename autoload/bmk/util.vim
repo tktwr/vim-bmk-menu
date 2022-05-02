@@ -2,10 +2,12 @@
 " util
 "------------------------------------------------------
 func bmk#util#BmkGetDirName(filepath)
-  if (isdirectory(a:filepath))
-    return a:filepath
+  let filepath = fnamemodify(expand(a:filepath), ':p')
+  if (isdirectory(filepath))
+    return filepath
+  else
+    return fnamemodify(filepath, ':h')
   endif
-  return substitute(a:filepath, "/[^/]*$", "", "")
 endfunc
 
 "------------------------------------------------------

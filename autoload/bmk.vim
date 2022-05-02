@@ -175,7 +175,7 @@ func bmk#BmkEditDirInTerm(dir)
 endfunc
 
 func bmk#BmkEditDir(dir, winnr)
-  let dir = expand(a:dir)
+  let dir = fnamemodify(expand(a:dir), ':p')
   call vis#window#VisGotoWinnr(a:winnr)
 
   if &buftype == 'terminal'
@@ -188,7 +188,7 @@ func bmk#BmkEditDir(dir, winnr)
 endfunc
 
 func bmk#BmkEditFile(file, winnr)
-  let file = expand(a:file)
+  let file = fnamemodify(expand(a:file), ':p')
   let winnr = vis#window#VisFindEditor(a:winnr)
   call vis#window#VisGotoWinnr(winnr)
 
@@ -202,7 +202,7 @@ func bmk#BmkEditFile(file, winnr)
 endfunc
 
 func bmk#BmkEditPDF(file, winnr)
-  let file = expand(a:file)
+  let file = fnamemodify(expand(a:file), ':p')
   let winnr = vis#window#VisFindEditor(a:winnr)
   call vis#window#VisGotoWinnr(winnr)
 
