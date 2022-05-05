@@ -6,9 +6,9 @@ func bmk#BmkInit()
   let s:bmk_debug = 0
   let s:bmk_winwidth = 30
   let s:bmk_edit_dir_func = ""
-  let s:bmk_open_url_prog = "default_chrome.sh"
-  let s:bmk_open_dir_prog = "default_explorer.sh"
-  let s:bmk_open_file_prog = "default_vscode.sh"
+  let s:bmk_open_url_prog = "default_open.sh"
+  let s:bmk_open_dir_prog = "default_open.sh"
+  let s:bmk_open_file_prog = "default_open.sh"
 
   call bmk#BmkSetting()
 endfunc
