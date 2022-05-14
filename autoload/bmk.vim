@@ -1,14 +1,16 @@
 "------------------------------------------------------
 " init
 "------------------------------------------------------
+let s:bmk_bin_dir = expand('<sfile>:p:h:h')."/bin/"
+
 func bmk#BmkInit()
   " set defaults
   let s:bmk_debug = 0
   let s:bmk_winwidth = 30
-  let s:bmk_edit_dir_func = ""
-  let s:bmk_open_url_prog = "default_open.sh"
-  let s:bmk_open_dir_prog = "default_open.sh"
-  let s:bmk_open_file_prog = "default_open.sh"
+  let s:bmk_edit_dir_func = "VisFern"
+  let s:bmk_open_url_prog = s:bmk_bin_dir."default_open.sh"
+  let s:bmk_open_dir_prog = s:bmk_bin_dir."default_open.sh"
+  let s:bmk_open_file_prog = s:bmk_bin_dir."default_open.sh"
 
   call bmk#BmkSetting()
 endfunc
