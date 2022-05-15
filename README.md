@@ -2,12 +2,24 @@
 
 vim-bmk-menu is a user defined popup menu specified in bookmark files.
 
+Requirements: Vim >= 8.1 or Neovim >= 0.7.0 (limited functionalities)
+
 ## Install
+
+Install plugins using a plugin manager such as
+[vim-plug](https://github.com/junegunn/vim-plug).
+
+Install
+[popup-menu.nvim](https://github.com/kamykn/popup-menu.nvim)
+to support a popup menu in neovim.
+~~~
+if has('nvim')
+  Plug 'kamykn/popup-menu.nvim'
+endif
+~~~
 
 vim-bmk-menu is supposed to be used with
 [vim-ide-style](https://github.com/tktwr/vim-ide-style).
-
-For vim-plug, install the vim-bmk-menu plugin as follows.
 ~~~
 Plug 'tktwr/vim-bmk-menu'
 Plug 'tktwr/vim-ide-style'

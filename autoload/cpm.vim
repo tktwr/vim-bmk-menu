@@ -241,14 +241,21 @@ func! cpm#CpmFilter(id, key)
   return popup_filter_menu(a:id, a:key)
 endfunc
 
+"------------------------------------------------------
+" vim 8.1
 func! cpm#CpmHandler(id, result)
   if a:result == 0
   elseif a:result > 0
     let idx = a:result - 1
 
     " key in menu
-    let cmd = s:cpm_cmd_dict[w:cpm_menu[idx]]
+    let key = w:cpm_menu[idx]
+    let cmd = s:cpm_cmd_dict[key]
     let cmd = expand(cmd)
+
+    " [DEBUG]
+    "echom printf("key = [%s]", key)
+    "echom printf("cmd = [%s]", cmd)
 
     if w:edit_type == 0
       call bmk#BmkEdit(cmd, 0)
@@ -260,6 +267,20 @@ func! cpm#CpmHandler(id, result)
   endif
 endfunc
 
+" nvim
+func! cpm#CpmPopupMenuHandlerStr(str)
+  let key = a:str." "
+  let cmd = s:cpm_cmd_dict[key]
+  let cmd = expand(cmd)
+
+  " [DEBUG]
+  "echom printf("key = [%s]", key)
+  "echom printf("cmd = [%s]", cmd)
+
+  call bmk#BmkEdit(cmd, 0)
+endfunc
+
+"------------------------------------------------------
 func! cpm#CpmOpen(menu_name='', menu_nr=0)
   if (!exists('s:cpm_menu_all'))
     call cpm#CpmReload()
@@ -267,7 +288,20 @@ func! cpm#CpmOpen(menu_name='', menu_nr=0)
   let w:cpm_menu_name = s:CpmGetValidMenuName(a:menu_name)
   let w:cpm_menu_nr = a:menu_nr
   let w:cpm_menu = s:CpmGetMenu(w:cpm_menu_name, w:cpm_menu_nr)
-  let winid = popup_menu(w:cpm_menu, #{
+
+  if exists('*popup_menu')
+    let winid = s:CpmPopupMenuImplVim81(w:cpm_menu)
+  elseif has('nvim') && exists('g:loaded_popup_menu_plugin')
+    let winid = s:CpmPopupMenuImplNvim(w:cpm_menu)
+  else
+    let winid = s:CpmPopupMenuImplInput(w:cpm_menu)
+  endif
+  return winid
+endfunc
+
+" vim 8.1
+func! s:CpmPopupMenuImplVim81(list)
+  let winid = popup_menu(a:list, #{
     \ filter: 'cpm#CpmFilter',
     \ callback: 'cpm#CpmHandler',
     \ border: [0,0,0,0],
@@ -278,6 +312,28 @@ func! cpm#CpmOpen(menu_name='', menu_nr=0)
     \ moved: 'WORD',
     \ })
   return winid
+endfunc
+
+" nvim with the plugin 'kamykn/popup-menu.nvim'
+func! s:CpmPopupMenuImplNvim(list)
+  let Callback_fn = {selected_str -> cpm#CpmPopupMenuHandlerStr(selected_str)}
+  call popup_menu#open(a:list, Callback_fn)
+  return 0
+endfunc
+
+" old vim / nvim
+func! s:CpmPopupMenuImplInput(list)
+  let index = inputlist(a:list)
+  call cpm#CpmPopupMenuHandler(0, index)
+  return 0
+endfunc
+
+" print a list
+func! s:CpmPopupMenuImplPrint(list)
+  for i in a:list
+    echo i
+  endfor
+  return 0
 endfunc
 
 "------------------------------------------------------
