@@ -13,14 +13,6 @@ let g:loaded_bmk = 1
 "------------------------------------------------------
 " public func
 "------------------------------------------------------
-func BmkEditDir(dir, winnr)
-  call bmk#BmkEditDir(a:dir, a:winnr)
-endfunc
-
-func BmkEditFile(file, winnr)
-  call bmk#BmkEditFile(a:file, a:winnr)
-endfunc
-
 func BmkOpenURL(url)
   call bmk#BmkOpenURL(a:url)
 endfunc
@@ -33,14 +25,38 @@ func BmkOpenDir(url)
   call bmk#BmkOpenDir(a:url)
 endfunc
 
-func BmkViewThis()
-  call bmk#BmkViewThis()
+"------------------------------------------------------
+func BmkEditDir(dir, winnr=0)
+  call bmk#BmkEditDir(a:dir, a:winnr)
 endfunc
 
+func BmkEditFile(file, winnr=0)
+  call bmk#BmkEditFile(a:file, a:winnr)
+endfunc
+
+"------------------------------------------------------
+func BmkOpen(url, winnr=0)
+  call bmk#BmkOpen(a:url, a:winnr)
+endfunc
+
+func BmkView(url, winnr=0)
+  call bmk#BmkView(a:url, a:winnr)
+endfunc
+
+func BmkEdit(url, winnr=0)
+  call bmk#BmkEdit(a:url, a:winnr)
+endfunc
+
+"------------------------------------------------------
 func BmkOpenThis()
   call bmk#BmkOpenThis()
 endfunc
 
+func BmkViewThis()
+  call bmk#BmkViewThis()
+endfunc
+
+"------------------------------------------------------
 func BmkToggleDebug()
   call bmk#BmkToggleDebug()
 endfunc

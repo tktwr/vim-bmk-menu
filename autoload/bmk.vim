@@ -166,6 +166,27 @@ func s:BmkNextItem()
 endfunc
 
 "------------------------------------------------------
+" external open
+"------------------------------------------------------
+func bmk#BmkOpenURL(url)
+  let url = expand(a:url)
+  exec printf("silent !%s %s", s:bmk_open_url_prog, url)
+  redraw!
+endfunc
+
+func bmk#BmkOpenDir(url)
+  let url = expand(a:url)
+  exec printf("silent !%s %s", s:bmk_open_dir_prog, url)
+  redraw!
+endfunc
+
+func bmk#BmkOpenFile(url)
+  let url = expand(a:url)
+  exec printf("silent !%s %s", s:bmk_open_file_prog, url)
+  redraw!
+endfunc
+
+"------------------------------------------------------
 " internal open
 "------------------------------------------------------
 func bmk#BmkEditDirInTerm(dir)
@@ -254,27 +275,6 @@ func bmk#BmkExecTermCommand(cmd, winnr)
 
   let bufnr = winbufnr(0)
   call term_sendkeys(bufnr, cmd)
-endfunc
-
-"------------------------------------------------------
-" external open
-"------------------------------------------------------
-func bmk#BmkOpenURL(url)
-  let url = expand(a:url)
-  exec printf("silent !%s %s", s:bmk_open_url_prog, url)
-  redraw!
-endfunc
-
-func bmk#BmkOpenDir(url)
-  let url = expand(a:url)
-  exec printf("silent !%s %s", s:bmk_open_dir_prog, url)
-  redraw!
-endfunc
-
-func bmk#BmkOpenFile(url)
-  let url = expand(a:url)
-  exec printf("silent !%s %s", s:bmk_open_file_prog, url)
-  redraw!
 endfunc
 
 "------------------------------------------------------
