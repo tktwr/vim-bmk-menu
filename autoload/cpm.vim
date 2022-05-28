@@ -11,6 +11,8 @@ func cpm#CpmInit()
   let s:separator = "------------------------------"
   let s:cpm_key = "\<Space>"
   let s:cpm_term_key = "\<C-Space>"
+  let s:cpm_user_bmk_dir = '~/.bmk_dir.txt'
+  let s:cpm_user_bmk_file = '~/.bmk_file.txt'
   let s:cpm_files = [
     \ s:cpm_plugin_dir."bmk/cmd.txt",
     \ s:cpm_plugin_dir."bmk/bmk.txt",
@@ -39,6 +41,12 @@ func cpm#CpmSetting()
   endif
   if exists("g:cpm_titles")
     let s:cpm_titles = g:cpm_titles
+  endif
+  if exists("g:cpm_user_bmk_dir")
+    let s:cpm_user_bmk_dir = g:cpm_user_bmk_dir
+  endif
+  if exists("g:cpm_user_bmk_file")
+    let s:cpm_user_bmk_file = g:cpm_user_bmk_file
   endif
 endfunc
 
@@ -129,6 +137,30 @@ func! s:CpmMakeCombinedMenu(cmb_titles)
   for i in l
     let m += s:cpm_menu_all[i]
   endfor
+endfunc
+
+"------------------------------------------------------
+" save
+"------------------------------------------------------
+func! cpm#CpmSaveURL(url)
+  let url = expand(a:url)
+
+  if isdirectory(url)
+    let file = expand(s:cpm_user_bmk_dir)
+  else
+    let file = expand(s:cpm_user_bmk_file)
+  endif
+
+  let key = fnamemodify(url, ':p:s?/$??:t')
+  let val = fnamemodify(url, ':p')
+  let val = vis#util#VisUnexpand(val)
+
+  let line = printf('-   %s | %s', key, val)
+  call writefile([line], file, 'as')
+endfunc
+
+func! cpm#CpmSave()
+  call cpm#CpmSaveURL(expand('%'))
 endfunc
 
 "------------------------------------------------------

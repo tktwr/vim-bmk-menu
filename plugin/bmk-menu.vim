@@ -62,6 +62,11 @@ func BmkToggleDebug()
 endfunc
 
 "------------------------------------------------------
+func CpmSave()
+  call cpm#CpmSave()
+endfunc
+
+"------------------------------------------------------
 " command for bmk
 "------------------------------------------------------
 command! -nargs=+ BmkEditDir   call bmk#BmkEditDir(<f-args>)
