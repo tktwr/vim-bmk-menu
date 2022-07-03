@@ -44,6 +44,15 @@ func bmk#BmkSetting()
 endfunc
 
 "------------------------------------------------------
+func s:BmkExpand(url)
+  let url = a:url
+  if (match(url, 'http\|https') == 0)
+    return url
+  endif
+  return expand(url)
+endfunc
+
+"------------------------------------------------------
 " type
 "------------------------------------------------------
 func bmk#BmkUrlType(url)
@@ -133,7 +142,7 @@ endfunc
 
 func bmk#BmkGetExpandedValueItem()
   let line = getline('.')
-  return expand(bmk#BmkGetItem(line, 2))
+  return s:BmkExpand(bmk#BmkGetItem(line, 2))
 endfunc
 
 "------------------------------------------------------
@@ -169,20 +178,23 @@ endfunc
 " external open
 "------------------------------------------------------
 func bmk#BmkOpenURL(url)
-  let url = expand(a:url)
-  exec printf("silent !%s %s", s:bmk_open_url_prog, url)
+  let url = s:BmkExpand(a:url)
+  let cmd = printf("%s '%s'", s:bmk_open_url_prog, url)
+  call system(cmd)
   redraw!
 endfunc
 
 func bmk#BmkOpenDir(url)
-  let url = expand(a:url)
-  exec printf("silent !%s %s", s:bmk_open_dir_prog, url)
+  let url = s:BmkExpand(a:url)
+  let cmd = printf("%s '%s'", s:bmk_open_dir_prog, url)
+  call system(cmd)
   redraw!
 endfunc
 
 func bmk#BmkOpenFile(url)
-  let url = expand(a:url)
-  exec printf("silent !%s %s", s:bmk_open_file_prog, url)
+  let url = s:BmkExpand(a:url)
+  let cmd = printf("%s '%s'", s:bmk_open_file_prog, url)
+  call system(cmd)
   redraw!
 endfunc
 
@@ -198,7 +210,7 @@ func bmk#BmkEditDirInTerm(dir)
 endfunc
 
 func bmk#BmkEditDir(dir, winnr)
-  let dir = fnamemodify(resolve(expand(a:dir)), ':p')
+  let dir = fnamemodify(resolve(s:BmkExpand(a:dir)), ':p')
   call vis#window#VisGotoWinnr(a:winnr)
 
   if &buftype == 'terminal'
@@ -211,7 +223,7 @@ func bmk#BmkEditDir(dir, winnr)
 endfunc
 
 func bmk#BmkEditFile(file, winnr)
-  let file = fnamemodify(resolve(expand(a:file)), ':p')
+  let file = fnamemodify(resolve(s:BmkExpand(a:file)), ':p')
   let winnr = vis#window#VisFindEditor(a:winnr)
   call vis#window#VisGotoWinnr(winnr)
 
@@ -225,7 +237,7 @@ func bmk#BmkEditFile(file, winnr)
 endfunc
 
 func bmk#BmkEditPDF(file, winnr)
-  let file = fnamemodify(resolve(expand(a:file)), ':p')
+  let file = fnamemodify(resolve(s:BmkExpand(a:file)), ':p')
   let winnr = vis#window#VisFindEditor(a:winnr)
   call vis#window#VisGotoWinnr(winnr)
 
@@ -250,7 +262,7 @@ endfunc
 func bmk#BmkExecVimCommand(cmd, winnr)
   call vis#window#VisGotoWinnr(a:winnr)
 
-  let cmd = expand(a:cmd)
+  let cmd = s:BmkExpand(a:cmd)
   let cmd = substitute(cmd, '_Plug_', "\<Plug>", '')
 
   if (cmd[0] == ':')
@@ -267,7 +279,7 @@ func bmk#BmkExecTermCommand(cmd, winnr)
     return
   endif
 
-  let cmd = expand(a:cmd)
+  let cmd = s:BmkExpand(a:cmd)
   let cmd = substitute(cmd, '<CR>', "\<CR>", '')
   if (match(cmd, '^> ') == 0)
     let cmd = cmd[2:]
@@ -281,7 +293,7 @@ endfunc
 " action
 "------------------------------------------------------
 func bmk#BmkOpen(url, winnr)
-  let url = expand(a:url)
+  let url = s:BmkExpand(a:url)
   let type = bmk#BmkUrlType(url)
 
   if (type == "http")
@@ -309,7 +321,7 @@ func bmk#BmkOpen(url, winnr)
 endfunc
 
 func bmk#BmkView(url, winnr)
-  let url = expand(a:url)
+  let url = s:BmkExpand(a:url)
   let type = bmk#BmkUrlType(url)
 
   if (type == "http")
@@ -337,7 +349,7 @@ func bmk#BmkView(url, winnr)
 endfunc
 
 func bmk#BmkEdit(url, winnr)
-  let url = expand(a:url)
+  let url = s:BmkExpand(a:url)
   let type = bmk#BmkUrlType(url)
 
   if s:bmk_debug
@@ -408,7 +420,7 @@ endfunc
 " action on <cfile> or the current buffer
 "------------------------------------------------------
 func bmk#BmkOpenThis()
-  let val = expand("<cfile>")
+  let val = s:BmkExpand("<cfile>")
 
   let r = bmk#BmkOpen(val, 0)
   if !r
@@ -417,7 +429,7 @@ func bmk#BmkOpenThis()
 endfunc
 
 func bmk#BmkViewThis()
-  let val = expand("<cfile>")
+  let val = s:BmkExpand("<cfile>")
 
   let r = bmk#BmkView(val, 0)
   if !r
