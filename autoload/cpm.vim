@@ -18,9 +18,9 @@ func cpm#CpmInit()
     \ s:cpm_plugin_dir."bmk/bmk.txt",
     \ ]
   let s:cpm_titles = {
-    \ 'terminal' : ['cmd.term', 'cmd.git'],
-    \ 'buffer'   : ['cmd.buf & cmd.sys', 'links'],
-    \ 'ft:fern'  : ['bmk.dir'],
+    \ 'default'          : ['cmd.buf & cmd.sys', 'links'],
+    \ 'default.terminal' : ['cmd.term', 'cmd.git'],
+    \ 'default.fern'     : ['bmk.dir'],
     \ }
 
   call cpm#CpmSetting()
@@ -169,44 +169,33 @@ endfunc
 func! s:CpmInMenu(name)
   let l = get(s:cpm_titles, a:name, [])
   if l != []
+    " [DEBUG]
+    "echom "l: ".string(l)
     return 1
   else
     return 0
   endif
 endfunc
 
-func! s:CpmGetValidMenuName(name='')
-  if a:name != ''
-    let name = a:name
-    if s:CpmInMenu(name)
-      return name
-    endif
-  endif
+func! s:CpmGetValidMenuName(name='default')
+  let name = a:name
 
   if &buftype == 'terminal'
-    let name = 'terminal'
-    if s:CpmInMenu(name)
-      return name
-    endif
+    let name = printf("%s.%s", name, &buftype)
+  elseif &diff == 1
+    let name = printf("%s.%s", name, 'diff')
+  elseif &filetype != ''
+    let name = printf("%s.%s", name, &filetype)
   endif
 
-  if &diff == 1
-    let name = 'diff'
-    if s:CpmInMenu(name)
-      return name
-    endif
-  endif
-
-  let name = 'ft:'.&filetype
   if s:CpmInMenu(name)
     return name
   endif
-
-  if (vis#sidebar#VisInSideBar())
-    return 'buffer:side'
-  else
-    return 'buffer'
+  if s:CpmInMenu(a:name)
+    return a:name
   endif
+
+  return 'default'
 endfunc
 
 func! s:CpmGetMenu(name, nr)
@@ -313,11 +302,13 @@ func! cpm#CpmPopupMenuHandlerStr(str)
 endfunc
 
 "------------------------------------------------------
-func! cpm#CpmOpen(menu_name='', menu_nr=0)
+func! cpm#CpmOpen(menu_name='default', menu_nr=0)
   if (!exists('s:cpm_menu_all'))
     call cpm#CpmReload()
   endif
   let w:cpm_menu_name = s:CpmGetValidMenuName(a:menu_name)
+  " [DEBUG]
+  "echom "menu: ".w:cpm_menu_name
   let w:cpm_menu_nr = a:menu_nr
   let w:cpm_menu = s:CpmGetMenu(w:cpm_menu_name, w:cpm_menu_nr)
 
