@@ -252,7 +252,12 @@ func! cpm#CpmFilter(id, key)
     let w:edit_type = 2
     return popup_filter_menu(a:id, "\<CR>")
   else
-    let idx = s:CpmFindByKey(w:cpm_menu, '^ '.a:key.' ')
+    if a:key == '.'
+      let pattern = '^ \. '
+    else
+      let pattern = '^ '.a:key.' '
+    endif
+    let idx = s:CpmFindByKey(w:cpm_menu, pattern)
     if (idx != -1)
       let idx = idx + 1
       call popup_close(a:id, idx)
