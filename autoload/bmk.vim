@@ -180,6 +180,7 @@ endfunc
 func bmk#BmkOpenURL(url)
   let url = s:BmkExpand(a:url)
   let cmd = printf("%s '%s'", s:bmk_open_url_prog, url)
+  echom cmd
   call system(cmd)
   redraw!
 endfunc
@@ -187,6 +188,7 @@ endfunc
 func bmk#BmkOpenDir(url)
   let url = s:BmkExpand(a:url)
   let cmd = printf("%s '%s'", s:bmk_open_dir_prog, url)
+  echom cmd
   call system(cmd)
   redraw!
 endfunc
@@ -194,6 +196,7 @@ endfunc
 func bmk#BmkOpenFile(url)
   let url = s:BmkExpand(a:url)
   let cmd = printf("%s '%s'", s:bmk_open_file_prog, url)
+  echom cmd
   call system(cmd)
   redraw!
 endfunc
