@@ -295,7 +295,14 @@ endfunc
 
 " nvim
 func! cpm#CpmPopupMenuHandlerStr(str)
-  let key = a:str." "
+  if a:str == ""
+    return
+  endif
+
+  let key = a:str
+  if (match(key, '^\s*---') != 0)
+    let key .= " "
+  endif
   let cmd = s:cpm_cmd_dict[key]
   let cmd = expand(cmd)
 
