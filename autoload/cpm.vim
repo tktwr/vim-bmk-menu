@@ -151,6 +151,9 @@ func! cpm#CpmSaveURL(url)
     let file = expand(s:cpm_user_bmk_file)
   endif
 
+  let dir = fnamemodify(file, ":p:h")
+  call mkdir(dir, "p")
+
   let key = fnamemodify(url, ':p:s?/$??:t')
   let val = fnamemodify(url, ':p')
   let val = vis#util#VisUnexpand(val)
