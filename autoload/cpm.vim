@@ -8,6 +8,7 @@ let s:cpm_plugin_dir = expand('<sfile>:p:h:h')."/"
 
 func cpm#CpmInit()
   " set defaults
+  let s:cpm_debug = 0
   let s:separator = "------------------------------"
   let s:cpm_key = "\<Space>"
   let s:cpm_term_key = "\<C-Space>"
@@ -99,6 +100,10 @@ func! s:CpmRegister(list, dict, line)
   let val = bmk#BmkGetItem(line, 2)
 
   let key = " ".key." "
+
+  if s:cpm_debug && has_key(a:dict, key)
+    echom printf("cpm.vim: duplicated key: %s", key)
+  endif
 
   let a:dict[key] = val
   call add(a:list, key)
