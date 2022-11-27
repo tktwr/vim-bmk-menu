@@ -9,6 +9,7 @@ let s:cpm_plugin_dir = expand('<sfile>:p:h:h')."/"
 func cpm#CpmInit()
   " set defaults
   let s:cpm_debug = 0
+  let s:title_separator = "=============================="
   let s:separator = "------------------------------"
   let s:cpm_key = "\<Space>"
   let s:cpm_term_key = "\<C-Space>"
@@ -86,8 +87,16 @@ endfunc
 "------------------------------------------------------
 " load
 "------------------------------------------------------
-func! s:CpmRegisterSeparator(list, dict, title, place='left')
-  let key = s:CpmFillItem(a:title, s:separator, a:place)
+func! s:CpmRegisterTitle(list, dict, title)
+  let key = s:CpmFillItem(a:title, s:title_separator, 'center')
+  let val = ":echo"
+
+  let a:dict[key] = val
+  call add(a:list, key)
+endfunc
+
+func! s:CpmRegisterSeparator(list, dict)
+  let key = s:CpmFillItem('   ', s:separator)
   let val = ":echo"
 
   let a:dict[key] = val
@@ -124,10 +133,10 @@ func! s:CpmLoad(cmd_file)
       let menu = []
       let s:cpm_menu_all[title] = menu
       let str = printf(' [%s] ', title)
-      call s:CpmRegisterSeparator(menu, s:cpm_cmd_dict, str, 'center')
+      call s:CpmRegisterTitle(menu, s:cpm_cmd_dict, str)
     elseif (match(line, '^\s*---') == 0)
       " separator
-      call s:CpmRegisterSeparator(menu, s:cpm_cmd_dict, '   ')
+      call s:CpmRegisterSeparator(menu, s:cpm_cmd_dict)
     elseif (match(line, '^\s*[-+] ') == 0)
       " item
       call s:CpmRegister(menu, s:cpm_cmd_dict, line)
