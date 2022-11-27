@@ -68,20 +68,19 @@ let g:cpm_titles = {
 ### cmd.txt
 ~~~
 [cmd.buf] ---------------------------- | ----------------------------------------
-- E IDE                                | :VisIDE
-- I WinInitSize                        | :VisWinInitSize
+- I IDE                                | :VisIDE
 - < SideBar                            | :VisSideBarToggle
 - D Fern                               | :VisFernDrawer %:p:h
 - N Editor                             | :new
 - T Term                               | :VisTerm
-- C VisSendCdE2T                       | :VisSendCdE2T
+- _ Cd                                 | :VisSendCdE2T
 - H Help                               | :VisHelp
 [cmd.sys] ---------------------------- | ----------------------------------------
 -   VisCheckEnv                        | :VisCheckEnv
 -   VisWinInfo                         | :VisWinInfo
 - R CpmReload                          | :CpmReload
 [cmd.term] --------------------------- | ----------------------------------------
--   WinInitSize            (I)         | > I<CR>
+-   IDE                    (I)         | > I<CR>
 -   Fern                   (D)         | > D<CR>
 -   Editor                 (N)         | > N<CR>
 -   Term                   (T)         | > T<CR>
