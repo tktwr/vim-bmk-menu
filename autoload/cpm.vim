@@ -9,8 +9,18 @@ let s:cpm_plugin_dir = expand('<sfile>:p:h:h')."/"
 func cpm#CpmInit()
   " set defaults
   let s:cpm_debug = 0
-  let s:title_separator = "=============================="
-  let s:separator = "------------------------------"
+  let s:cpm_style = 1
+
+  if s:cpm_style == 0
+    let s:cpm_border = 0
+    let s:title_separator = "=============================="
+    let s:separator = "------------------------------"
+  elseif s:cpm_style == 1
+    let s:cpm_border = 1
+    let s:title_separator = "=============================="
+    let s:separator = "──────────────────────────────"
+  endif
+
   let s:cpm_key = "\<Space>"
   let s:cpm_term_key = "\<C-Space>"
   let s:cpm_user_bmk_dir = '~/.bmk_dir.txt'
@@ -55,7 +65,7 @@ endfunc
 "------------------------------------------------------
 " util
 "------------------------------------------------------
-func! s:CpmFillItem(str, separator, place='left')
+func! s:CpmFillItem(separator, str='', place='left')
   let n = len(a:str)
   if a:place == 'left'
     let o = a:str.a:separator[n:]
@@ -88,7 +98,7 @@ endfunc
 " load
 "------------------------------------------------------
 func! s:CpmRegisterTitle(list, dict, title)
-  let key = s:CpmFillItem(a:title, s:title_separator, 'center')
+  let key = s:CpmFillItem(s:title_separator, a:title, 'center')
   let val = ":echo"
 
   let a:dict[key] = val
@@ -96,7 +106,7 @@ func! s:CpmRegisterTitle(list, dict, title)
 endfunc
 
 func! s:CpmRegisterSeparator(list, dict)
-  let key = s:CpmFillItem('   ', s:separator)
+  let key = s:CpmFillItem(s:separator)
   let val = ":echo"
 
   let a:dict[key] = val
@@ -135,6 +145,9 @@ func! s:CpmLoad(cmd_file)
       let str = printf(' [%s] ', title)
       call s:CpmRegisterTitle(menu, s:cpm_cmd_dict, str)
     elseif (match(line, '^\s*---') == 0)
+      " separator
+      call s:CpmRegisterSeparator(menu, s:cpm_cmd_dict)
+    elseif (match(line, '^\s*───') == 0)
       " separator
       call s:CpmRegisterSeparator(menu, s:cpm_cmd_dict)
     elseif (match(line, '^\s*[-+] ') == 0)
@@ -341,8 +354,9 @@ func! cpm#CpmOpen(menu_name='default', menu_nr=0)
   let w:cpm_menu_nr = a:menu_nr
   let w:cpm_menu = s:CpmGetMenu(w:cpm_menu_name, w:cpm_menu_nr)
 
+  let title = printf(" %s %d ", w:cpm_menu_name, w:cpm_menu_nr)
   if exists('*popup_menu')
-    let winid = s:CpmPopupMenuImplVim81(w:cpm_menu)
+    let winid = s:CpmPopupMenuImplVim81(title, w:cpm_menu)
   elseif has('nvim') && exists('g:loaded_popup_menu_plugin')
     let winid = s:CpmPopupMenuImplNvim(w:cpm_menu)
   else
@@ -352,17 +366,24 @@ func! cpm#CpmOpen(menu_name='default', menu_nr=0)
 endfunc
 
 " vim 8.1
-func! s:CpmPopupMenuImplVim81(list)
-  let winid = popup_menu(a:list, #{
+func! s:CpmPopupMenuImplVim81(title, list)
+  let opt = #{
+    \ title: a:title,
     \ filter: 'cpm#CpmFilter',
     \ callback: 'cpm#CpmHandler',
-    \ border: [0,0,0,0],
+    \ border: [1,1,1,1],
     \ padding: [0,0,0,0],
+    \ borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
     \ pos: 'botleft',
     \ line: 'cursor-1',
     \ col: 'cursor',
     \ moved: 'WORD',
-    \ })
+    \ }
+  if s:cpm_border == 0
+    let opt['border'] = [0,0,0,0]
+  endif
+  let winid = popup_menu(a:list, opt)
+  call win_execute(winid, 'setl syntax=cpm')
   return winid
 endfunc
 
