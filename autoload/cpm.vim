@@ -349,12 +349,16 @@ func! cpm#CpmOpen(menu_name='default', menu_nr=0)
     call cpm#CpmReload()
   endif
   let w:cpm_menu_name = s:CpmGetValidMenuName(a:menu_name)
-  " [DEBUG]
-  "echom "menu: ".w:cpm_menu_name
   let w:cpm_menu_nr = a:menu_nr
   let w:cpm_menu = s:CpmGetMenu(w:cpm_menu_name, w:cpm_menu_nr)
 
-  let title = printf(" %s %d ", w:cpm_menu_name, w:cpm_menu_nr)
+  let sz = len(s:cpm_titles[w:cpm_menu_name])
+  if sz > 1
+    let title = printf(" %s %d/%d ", w:cpm_menu_name, w:cpm_menu_nr+1, sz)
+  else
+    let title = printf(" %s ", w:cpm_menu_name)
+  endif
+
   if exists('*popup_menu')
     let winid = s:CpmPopupMenuImplVim81(title, w:cpm_menu)
   elseif has('nvim') && exists('g:loaded_popup_menu_plugin')
@@ -371,8 +375,8 @@ func! s:CpmPopupMenuImplVim81(title, list)
     \ title: a:title,
     \ filter: 'cpm#CpmFilter',
     \ callback: 'cpm#CpmHandler',
-    \ border: [1,1,1,1],
     \ padding: [0,0,0,0],
+    \ border: [1,1,1,1],
     \ borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
     \ pos: 'botleft',
     \ line: 'cursor-1',
