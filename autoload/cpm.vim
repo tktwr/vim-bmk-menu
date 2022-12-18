@@ -11,6 +11,10 @@ func cpm#CpmInit()
   let s:cpm_debug = 0
   let s:cpm_style = 1
 
+  if has('nvim')
+    let s:cpm_style = 0
+  endif
+
   if s:cpm_style == 0
     let s:cpm_border = 0
     let s:title_separator = "=============================="
