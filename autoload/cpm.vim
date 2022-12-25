@@ -347,6 +347,23 @@ func! cpm#CpmPopupMenuHandlerStr(str)
   call bmk#BmkEdit(cmd, 0)
 endfunc
 
+" nvim
+func! cpm#CpmPopupMenuHandlerStr2(str)
+  if a:str == ""
+    return
+  endif
+
+  let key = a:str
+  let cmd = s:cpm_cmd_dict[key]
+  let cmd = expand(cmd)
+
+  " [DEBUG]
+  "echom printf("key = [%s]", key)
+  "echom printf("cmd = [%s]", cmd)
+
+  call bmk#BmkEdit(cmd, 0)
+endfunc
+
 "------------------------------------------------------
 func! cpm#CpmOpen(menu_name='default', menu_nr=0)
   if (!exists('s:cpm_menu_all'))
@@ -367,9 +384,12 @@ func! cpm#CpmOpen(menu_name='default', menu_nr=0)
     let winid = s:CpmPopupMenuImplVim81(title, w:cpm_menu)
   elseif has('nvim') && exists('g:loaded_popup_menu_plugin')
     let winid = s:CpmPopupMenuImplNvim(w:cpm_menu)
+  elseif has('nvim') && exists('g:loaded_popup_menu')
+    let winid = s:CpmPopupMenuImplNvim2(w:cpm_menu)
   else
     let winid = s:CpmPopupMenuImplInput(w:cpm_menu)
   endif
+  call win_execute(winid, 'setl syntax=cpm')
   return winid
 endfunc
 
@@ -391,7 +411,6 @@ func! s:CpmPopupMenuImplVim81(title, list)
     let opt['border'] = [0,0,0,0]
   endif
   let winid = popup_menu(a:list, opt)
-  call win_execute(winid, 'setl syntax=cpm')
   return winid
 endfunc
 
@@ -399,6 +418,14 @@ endfunc
 func! s:CpmPopupMenuImplNvim(list)
   let Callback_fn = {selected_str -> cpm#CpmPopupMenuHandlerStr(selected_str)}
   call popup_menu#open(a:list, Callback_fn)
+  return 0
+endfunc
+
+" nvim with the plugin 'Ajnasz/vim-popup-menu'
+func! s:CpmPopupMenuImplNvim2(list)
+  let Callback_fn = {selected_str -> cpm#CpmPopupMenuHandlerStr2(selected_str)}
+  call popup_menu#open(a:list, Callback_fn)
+  set signcolumn=auto
   return 0
 endfunc
 
