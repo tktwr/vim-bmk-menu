@@ -214,6 +214,16 @@ endfunc
 
 func bmk#BmkEditDir(dir, winnr)
   let dir = fnamemodify(resolve(s:BmkExpand(a:dir)), ':p')
+
+  if filereadable(dir)
+    let dir = fnamemodify(dir, ':h')
+  endif
+
+  if !isdirectory(dir)
+    echom printf('not directory: %s', dir)
+    return
+  endif
+
   call vis#window#VisGotoWinnr(a:winnr)
 
   if &buftype == 'terminal'
