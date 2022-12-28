@@ -458,7 +458,7 @@ func bmk#BmkMapWin()
     return
   endif
 
-  if (vis#sidebar#VisInSideBar())
+  if (vis#sidebar#inside())
     nnoremap <silent> <buffer> <CR>    :call bmk#BmkEditItem(-2)<CR>
     nnoremap <silent> <buffer> <C-CR>  :call bmk#BmkViewItem(-2)<CR>
     nnoremap <silent> <buffer> <S-CR>  :call bmk#BmkOpenItem(-2)<CR>
