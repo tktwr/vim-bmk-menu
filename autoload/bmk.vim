@@ -224,7 +224,7 @@ func bmk#BmkEditDir(dir, winnr)
     return
   endif
 
-  call vis#window#VisGotoWinnr(a:winnr)
+  call vis#window#goto(a:winnr)
 
   if &buftype == 'terminal'
     call bmk#BmkEditDirInTerm(dir)
@@ -238,7 +238,7 @@ endfunc
 func bmk#BmkEditFile(file, winnr)
   let file = fnamemodify(resolve(s:BmkExpand(a:file)), ':p')
   let winnr = vis#window#VisFindEditor(a:winnr)
-  call vis#window#VisGotoWinnr(winnr)
+  call vis#window#goto(winnr)
 
   let dir = bmk#util#BmkGetDirName(file)
   if &buftype == 'terminal'
@@ -252,7 +252,7 @@ endfunc
 func bmk#BmkEditPDF(file, winnr)
   let file = fnamemodify(resolve(s:BmkExpand(a:file)), ':p')
   let winnr = vis#window#VisFindEditor(a:winnr)
-  call vis#window#VisGotoWinnr(winnr)
+  call vis#window#goto(winnr)
 
   let dir = bmk#util#BmkGetDirName(file)
   if &buftype == 'terminal'
@@ -273,7 +273,7 @@ func bmk#BmkEditPDF(file, winnr)
 endfunc
 
 func bmk#BmkExecVimCommand(cmd, winnr)
-  call vis#window#VisGotoWinnr(a:winnr)
+  call vis#window#goto(a:winnr)
 
   let cmd = s:BmkExpand(a:cmd)
   let cmd = substitute(cmd, '_Plug_', "\<Plug>", '')
@@ -286,7 +286,7 @@ func bmk#BmkExecVimCommand(cmd, winnr)
 endfunc
 
 func bmk#BmkExecTermCommand(cmd, winnr)
-  call vis#window#VisGotoWinnr(a:winnr)
+  call vis#window#goto(a:winnr)
 
   if &buftype != 'terminal'
     return
