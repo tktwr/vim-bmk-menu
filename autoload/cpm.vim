@@ -9,21 +9,8 @@ let s:cpm_plugin_dir = expand('<sfile>:p:h:h')."/"
 func cpm#CpmInit()
   " set defaults
   let s:cpm_debug = 0
-  let s:cpm_style = 1
-
-  if has('nvim')
-    let s:cpm_style = 0
-  endif
-
-  if s:cpm_style == 0
-    let s:cpm_border = 0
-    let s:title_separator = "=============================="
-    let s:separator = "------------------------------"
-  elseif s:cpm_style == 1
-    let s:cpm_border = 1
-    let s:title_separator = "=============================="
-    let s:separator = "──────────────────────────────"
-  endif
+  let s:title_separator = "=============================="
+  let s:separator = "──────────────────────────────"
 
   let s:cpm_key = "\<Space>"
   let s:cpm_term_key = "\<C-Space>"
@@ -70,13 +57,13 @@ endfunc
 " util
 "------------------------------------------------------
 func! s:CpmFillItem(separator, str='', place='left')
-  let n = len(a:str)
+  let n = strchars(a:str)
   if a:place == 'left'
     let o = a:str.a:separator[n:]
   elseif a:place == 'right'
     let o = a:separator[n:].a:str
   elseif a:place == 'center'
-    let nn = len(a:separator) - n
+    let nn = strchars(a:separator) - n
     let r = nn % 2
     let nl = nn/2 - 1
     let nr = nn/2 - 1 + r
@@ -259,7 +246,8 @@ func! s:CpmFixPos(id)
   \ })
 endfunc
 
-func! cpm#CpmFilter(id, key)
+"------------------------------------------------------
+func! cpm#filter(id, key)
   let w:edit_type = 0
   if a:key == s:cpm_key || a:key == s:cpm_term_key
     call popup_close(a:id, 0)
@@ -303,7 +291,7 @@ endfunc
 
 "------------------------------------------------------
 " vim 8.1
-func! cpm#CpmHandler(id, result)
+func! cpm#handler(id, result)
   if a:result == 0
   elseif a:result > 0
     let idx = a:result - 1
@@ -328,27 +316,7 @@ func! cpm#CpmHandler(id, result)
 endfunc
 
 " nvim
-func! cpm#CpmPopupMenuHandlerStr(str)
-  if a:str == ""
-    return
-  endif
-
-  let key = a:str
-  if (match(key, '^\s*---') != 0)
-    let key .= " "
-  endif
-  let cmd = s:cpm_cmd_dict[key]
-  let cmd = expand(cmd)
-
-  " [DEBUG]
-  "echom printf("key = [%s]", key)
-  "echom printf("cmd = [%s]", cmd)
-
-  call bmk#BmkEdit(cmd, 0)
-endfunc
-
-" nvim
-func! cpm#CpmPopupMenuHandlerStr2(str)
+func! cpm#handler_str(str)
   if a:str == ""
     return
   endif
@@ -381,67 +349,14 @@ func! cpm#CpmOpen(menu_name='default', menu_nr=0)
   endif
 
   if exists('*popup_menu')
-    let winid = s:CpmPopupMenuImplVim81(title, w:cpm_menu)
-  elseif has('nvim') && exists('g:loaded_popup_menu_plugin')
-    let winid = s:CpmPopupMenuImplNvim(w:cpm_menu)
+    " vim 8.1
+    let winid = cpm#popup_menu#open(title, w:cpm_menu, 'cpm#handler', 'cpm#filter')
   elseif has('nvim') && exists('g:loaded_popup_menu')
-    let winid = s:CpmPopupMenuImplNvim2(w:cpm_menu)
-  else
-    let winid = s:CpmPopupMenuImplInput(w:cpm_menu)
+    " nvim with the plugin 'Ajnasz/vim-popup-menu'
+    let winid = cpm#popup_menu#open(title, w:cpm_menu, 'cpm#handler_str', '')
   endif
   call win_execute(winid, 'setl syntax=cpm')
   return winid
-endfunc
-
-" vim 8.1
-func! s:CpmPopupMenuImplVim81(title, list)
-  let opt = #{
-    \ title: a:title,
-    \ filter: 'cpm#CpmFilter',
-    \ callback: 'cpm#CpmHandler',
-    \ padding: [0,0,0,0],
-    \ border: [1,1,1,1],
-    \ borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
-    \ pos: 'botleft',
-    \ line: 'cursor-1',
-    \ col: 'cursor',
-    \ moved: 'WORD',
-    \ }
-  if s:cpm_border == 0
-    let opt['border'] = [0,0,0,0]
-  endif
-  let winid = popup_menu(a:list, opt)
-  return winid
-endfunc
-
-" nvim with the plugin 'kamykn/popup-menu.nvim'
-func! s:CpmPopupMenuImplNvim(list)
-  let Callback_fn = {selected_str -> cpm#CpmPopupMenuHandlerStr(selected_str)}
-  call popup_menu#open(a:list, Callback_fn)
-  return 0
-endfunc
-
-" nvim with the plugin 'Ajnasz/vim-popup-menu'
-func! s:CpmPopupMenuImplNvim2(list)
-  let Callback_fn = {selected_str -> cpm#CpmPopupMenuHandlerStr2(selected_str)}
-  call popup_menu#open(a:list, Callback_fn)
-  set signcolumn=auto
-  return 0
-endfunc
-
-" old vim / nvim
-func! s:CpmPopupMenuImplInput(list)
-  let index = inputlist(a:list)
-  call cpm#CpmPopupMenuHandler(0, index)
-  return 0
-endfunc
-
-" print a list
-func! s:CpmPopupMenuImplPrint(list)
-  for i in a:list
-    echo i
-  endfor
-  return 0
 endfunc
 
 "------------------------------------------------------
