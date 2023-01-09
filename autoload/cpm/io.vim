@@ -17,7 +17,7 @@ func! s:FillItem(separator, str='', place='left')
 endfunc
 
 func! s:RegisterTitle(list, dict, title)
-  let key = s:FillItem(g:title_separator, a:title, 'center')
+  let key = s:FillItem(g:cpm_title_separator, a:title, 'center')
   let val = ":echo"
 
   let a:dict[key] = val
@@ -25,7 +25,7 @@ func! s:RegisterTitle(list, dict, title)
 endfunc
 
 func! s:RegisterSeparator(list, dict)
-  let key = s:FillItem(g:separator)
+  let key = s:FillItem(g:cpm_separator)
   let val = ":echo"
 
   let a:dict[key] = val
