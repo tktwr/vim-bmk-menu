@@ -1,14 +1,10 @@
-"======================================================
-" Bmk
-"======================================================
-"if v:version < 802
-"  finish
-"endif
-
 if exists("g:loaded_bmk")
   finish
 endif
 let g:loaded_bmk = 1
+
+call bmk#init()
+call cpm#init()
 
 "------------------------------------------------------
 " public func
@@ -83,12 +79,7 @@ command! -nargs=* CpmOpen      call cpm#CpmOpen(<f-args>)
 "------------------------------------------------------
 augroup ag_bmk
   autocmd!
-  autocmd BufWinEnter *        call bmk#BmkMapWin()
-  autocmd WinEnter    *        call bmk#BmkMapWin()
+  autocmd BufWinEnter *        call bmk#map()
+  autocmd WinEnter    *        call bmk#map()
 augroup END
 
-"------------------------------------------------------
-" init
-"------------------------------------------------------
-call bmk#BmkInit()
-call cpm#CpmInit()

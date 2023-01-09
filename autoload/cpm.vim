@@ -6,7 +6,7 @@
 "------------------------------------------------------
 let s:cpm_plugin_dir = expand('<sfile>:p:h:h')."/"
 
-func cpm#CpmInit()
+func cpm#init()
   " set defaults
   let s:cpm_debug = 0
   let s:title_separator = "=============================="
@@ -26,10 +26,10 @@ func cpm#CpmInit()
     \ 'default.fern'     : ['bmk.dir'],
     \ }
 
-  call cpm#CpmSetting()
+  call cpm#settings()
 endfunc
 
-func cpm#CpmSetting()
+func cpm#settings()
   "------------------------------------------------------
   " user defined global variables
   "------------------------------------------------------
@@ -350,10 +350,10 @@ func! cpm#CpmOpen(menu_name='default', menu_nr=0)
 
   if exists('*popup_menu')
     " vim 8.1
-    let winid = cpm#popup_menu#open(title, w:cpm_menu, 'cpm#handler', 'cpm#filter')
+    let winid = vis#popup_menu#open(title, w:cpm_menu, 'cpm#handler', 'cpm#filter')
   elseif has('nvim') && exists('g:loaded_popup_menu')
     " nvim with the plugin 'Ajnasz/vim-popup-menu'
-    let winid = cpm#popup_menu#open(title, w:cpm_menu, 'cpm#handler_str', '')
+    let winid = vis#popup_menu#open(title, w:cpm_menu, 'cpm#handler_str', '')
   endif
   call win_execute(winid, 'setl syntax=cpm')
   return winid
@@ -363,8 +363,8 @@ endfunc
 " reload
 "------------------------------------------------------
 func! cpm#CpmReload()
-  call bmk#BmkSetting()
-  call cpm#CpmSetting()
+  call bmk#settings()
+  call cpm#settings()
 
   " menu_entry: cmd/dir/url
   let s:cpm_cmd_dict = {}

@@ -3,7 +3,7 @@
 "------------------------------------------------------
 let s:bmk_bin_dir = expand('<sfile>:p:h:h')."/bin/"
 
-func bmk#BmkInit()
+func bmk#init()
   " set defaults
   let s:bmk_debug = 0
   let s:bmk_winwidth = 30
@@ -12,10 +12,10 @@ func bmk#BmkInit()
   let s:bmk_open_dir_prog = s:bmk_bin_dir."default_open.sh"
   let s:bmk_open_file_prog = s:bmk_bin_dir."default_open.sh"
 
-  call bmk#BmkSetting()
+  call bmk#settings()
 endfunc
 
-func bmk#BmkSetting()
+func bmk#settings()
   "------------------------------------------------------
   " aux funcs
   "------------------------------------------------------
@@ -453,7 +453,7 @@ endfunc
 "------------------------------------------------------
 " map
 "------------------------------------------------------
-func bmk#BmkMapWin()
+func bmk#map()
   if &filetype != "bmk"
     return
   endif
