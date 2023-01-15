@@ -36,8 +36,12 @@ func bmk#item#GetValueItem()
   return bmk#item#GetItem(line, 2)
 endfunc
 
-func bmk#item#GetExpandedValueItem()
-  let line = getline('.')
+func bmk#item#GetExpandedValueItem(line='')
+  if a:line == ''
+    let line = getline('.')
+  else
+    let line = a:line
+  endif
   return bmk#util#expand(bmk#item#GetItem(line, 2))
 endfunc
 
@@ -73,8 +77,8 @@ endfunc
 "------------------------------------------------------
 " action on bmk item
 "------------------------------------------------------
-func bmk#item#OpenItem(winnr=0)
-  let val = bmk#item#GetExpandedValueItem()
+func bmk#item#OpenItem(winnr=0, line='')
+  let val = bmk#item#GetExpandedValueItem(a:line)
   if val == ""
     return
   endif
@@ -82,8 +86,8 @@ func bmk#item#OpenItem(winnr=0)
   call bmk#Open(val, a:winnr)
 endfunc
 
-func bmk#item#ViewItem(winnr=0)
-  let val = bmk#item#GetExpandedValueItem()
+func bmk#item#ViewItem(winnr=0, line='')
+  let val = bmk#item#GetExpandedValueItem(a:line)
   if val == ""
     return
   endif
@@ -91,8 +95,8 @@ func bmk#item#ViewItem(winnr=0)
   call bmk#View(val, a:winnr)
 endfunc
 
-func bmk#item#EditItem(winnr=0)
-  let val = bmk#item#GetExpandedValueItem()
+func bmk#item#EditItem(winnr=0, line='')
+  let val = bmk#item#GetExpandedValueItem(a:line)
   if val == ""
     return
   endif
