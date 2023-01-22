@@ -16,7 +16,7 @@ endfunc
 
 " return indexed item
 func bmk#item#GetItem(line, idx)
-  let mx = '[-+] \(.\+\)\s*|\s*\(.\+\)'
+  let mx = '[-+*] \(.\+\)\s*|\s*\(.\+\)'
   let line = a:line
   let line = matchstr(line, mx)
   let item = substitute(line, mx, '\'.a:idx, '')
