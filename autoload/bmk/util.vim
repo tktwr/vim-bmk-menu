@@ -19,6 +19,22 @@ func bmk#util#expand(url)
   return expand(url)
 endfunc
 
+func bmk#util#icon(url)
+  let type = bmk#util#type(a:url)
+  let type_to_icon = {
+        \ 'http'         : ' ',
+        \ 'network'      : ' ',
+        \ 'dir'          : ' ',
+        \ 'file'         : ' ',
+        \ 'html'         : ' ',
+        \ 'pdf'          : ' ',
+        \ 'vim_normal'   : ' ',
+        \ 'vim_command'  : ' ',
+        \ 'term_command' : ' ',
+        \ }
+  return get(type_to_icon, type, '')
+endfunc
+
 func bmk#util#type(url)
   let url = a:url
 

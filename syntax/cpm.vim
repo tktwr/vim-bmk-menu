@@ -14,6 +14,8 @@ syn match    cpmSeparator        '^─\+$'
 syn match    cpmTitle            '^=\+ .* =\+$' contains=cpmTag
 syn match    cpmTag              '\[[^]]*\]' contained
 syn match    cpmTagR             '([^)]*)'
+syn match    cpmIcon             '[-﵆]'
+syn match    cpmDir              '\f\+/'
 
 "------------------------------------------------------
 " highlight
@@ -32,7 +34,9 @@ hi CpmBg2           ctermfg=239 guifg=#504945
 " highlight link
 "------------------------------------------------------
 hi link cpmSeparator        CpmBg2
-hi link cpmMenuShortCut     CpmRed
+hi link cpmMenuShortCut     CpmOrange
 hi link cpmTitle            CpmOrange
 hi link cpmTag              CpmYellow
 hi link cpmTagR             CpmGreen
+hi link cpmIcon             CpmGreen
+hi link cpmDir              CpmRed

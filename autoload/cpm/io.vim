@@ -16,6 +16,31 @@ func! s:FillItem(separator, str='', place='left')
   return o
 endfunc
 
+func! s:FormatKey(line, max_len)
+  if match(a:line, '(.\+)') == -1
+    let key = a:line
+    let nspaces = a:max_len - strchars(key)
+    let fmt = printf('%%s%%%ds', nspaces)
+    return printf(fmt, key, ' ')
+  else
+    let mx = '\(.\+\)\((.\+)\)'
+    let line = a:line
+    let line = matchstr(line, mx)
+    let key = substitute(line, mx, '\1', '')
+    let key = substitute(key, '\s*$', '', '')
+    let map = substitute(line, mx, '\2', '')
+    let nspaces = a:max_len - strchars(key)
+    let chars = strchars(map)
+    if nspaces > chars
+      let fmt = printf('%%s%%%ds', nspaces)
+    else
+      let fmt = printf('%%s %%s')
+    endif
+    return printf(fmt, key, map)
+  endif
+endfunc
+
+"------------------------------------------------------
 func! s:RegisterTitle(list, dict, title)
   let key = s:FillItem(g:cpm_title_separator, a:title, 'center')
   let val = ":echo"
@@ -37,10 +62,18 @@ func! s:Register(list, dict, line)
   let key = bmk#item#GetItem(line, 1)
   let val = bmk#item#GetItem(line, 2)
 
-  let key = " ".key." "
+  if match(key[2], '[a-zA-Z.,]') == 0
+    let val = bmk#util#expand(val)
+    let icon = bmk#util#icon(val)
+    let key = printf('%s%s%s', key[0:1], icon, key[2:])
+  endif
+
+  let width = strchars(g:cpm_separator)
+  let key = s:FormatKey(key, width - 2)
+  let key = printf(' %s ', key)
 
   if g:cpm_debug && has_key(a:dict, key)
-    echom printf("cpm.vim: duplicated key: %s", key)
+    echom printf("cpm.vim: duplicated key: [%s]", key)
   endif
 
   let a:dict[key] = val
