@@ -5,8 +5,8 @@ let g:cpm_plugin_dir = expand('<sfile>:p:h:h')."/"
 
 func cpm#init()
   let g:cpm_debug = 1
-  let g:cpm_title_separator = "=============================="
-  let g:cpm_separator = "──────────────────────────────"
+  let g:cpm_title_separator = "========================================"
+  let g:cpm_separator = "────────────────────────────────────────"
 
   if !exists('g:cpm_key')
     let g:cpm_key = "\<Space>"
