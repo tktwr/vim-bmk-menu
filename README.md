@@ -72,7 +72,7 @@ let g:cpm_titles = {
 - < SideBar                            | :VisSideBarToggle
 - D Fern                               | :VisFernDrawer %:p:h
 - N Editor                             | :new
-- T Term                               | :VisTerm
+- T Term                               | :below VisTerm
 - _ Cd                                 | :VisSendCdE2T
 - H Help                               | :VisHelp
 [cmd.sys] ---------------------------- | ----------------------------------------
