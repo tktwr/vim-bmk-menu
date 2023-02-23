@@ -148,6 +148,7 @@ func bmk#ExecVimCommand(cmd, winnr=0)
 
   let cmd = bmk#util#expand(a:cmd)
   let cmd = substitute(cmd, '_Plug_', "\<Plug>", '')
+  let cmd = substitute(cmd, '<C-.>', '\\&', '')
 
   if (cmd[0] == ':')
     exec cmd[1:]
