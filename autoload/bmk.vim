@@ -49,7 +49,8 @@ func bmk#EditDirInTerm(dir)
   if &buftype == 'terminal'
     exec "lcd" a:dir
     let bufnr = winbufnr(0)
-    call term_sendkeys(bufnr, "cd ".a:dir."\<CR>")
+    let cmd = printf("cd %s\<CR>", a:dir)
+    call term_sendkeys(bufnr, cmd)
   endif
 endfunc
 
@@ -165,10 +166,13 @@ func bmk#ExecTermCommand(cmd, winnr=0)
   endif
 
   let cmd = bmk#util#expand(a:cmd)
-  let cmd = substitute(cmd, '<CR>', "\<CR>", '')
   if (match(cmd, '^> ') == 0)
     let cmd = cmd[2:]
   endif
+  if (match(cmd, '<CR>') == -1)
+    let cmd ..= ' '
+  endif
+  let cmd = substitute(cmd, '<CR>', "\<CR>", '')
 
   let bufnr = winbufnr(0)
   call term_sendkeys(bufnr, cmd)
