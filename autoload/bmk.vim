@@ -148,7 +148,7 @@ func bmk#ExecVimCommand(cmd, winnr=0)
   call vis#window#goto(a:winnr)
 
   let cmd = bmk#util#expand(a:cmd)
-  let cmd = substitute(cmd, '<.\+>', '\\&', '')
+  "let cmd = substitute(cmd, '<.\+>', '\\&', '')
   let cmd = substitute(cmd, '_Plug_', "\<Plug>", '')
 
   if (cmd[0] == ':')
