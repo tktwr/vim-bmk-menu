@@ -5,7 +5,7 @@ let g:bmk_bin_dir = expand('<sfile>:p:h:h')."/bin/"
 
 func bmk#init()
   let g:bmk_debug = 0
-  let g:bmk_winwidth = 30
+  let g:bmk_winwidth = exists('g:bmk_winwidth') ? g:bmk_winwidth : 30
 
   if !exists('g:bmk_edit_dir_func')
     let g:bmk_edit_dir_func = "VisFern"
