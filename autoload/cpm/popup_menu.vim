@@ -77,9 +77,6 @@ func! cpm#popup_menu#filter(id, key)
   if a:key == g:cpm_key || a:key == g:cpm_term_key
     call popup_close(a:id, 0)
     return 1
-  elseif a:key == '0'
-    call s:FixPos(a:id)
-    return 1
   elseif a:key == 'l'
     call popup_close(a:id, 0)
     let nr = s:NextNr()
