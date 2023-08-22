@@ -16,7 +16,7 @@ endfunc
 
 " return indexed item
 func bmk#item#GetItem(line, idx)
-  let mx = '[-+*] \(.\+\)\s*|\s*\(.\+\)'
+  let mx = '[-+*] \(.\+\)\s*|\s*\(.\+\)\s*|\s*\(.\+\)'
   let line = a:line
   let line = matchstr(line, mx)
   let item = substitute(line, mx, '\'.a:idx, '')
@@ -27,13 +27,13 @@ endfunc
 " return "shortcut key"
 func bmk#item#GetKeyItem()
   let line = getline('.')
-  return bmk#item#GetItem(line, 1)
+  return bmk#item#GetItem(line, 2)
 endfunc
 
 " return "val"
 func bmk#item#GetValueItem()
   let line = getline('.')
-  return bmk#item#GetItem(line, 2)
+  return bmk#item#GetItem(line, 3)
 endfunc
 
 func bmk#item#GetExpandedValueItem(line='')
@@ -42,7 +42,7 @@ func bmk#item#GetExpandedValueItem(line='')
   else
     let line = a:line
   endif
-  return bmk#util#expand(bmk#item#GetItem(line, 2))
+  return bmk#util#expand(bmk#item#GetItem(line, 3))
 endfunc
 
 "------------------------------------------------------
