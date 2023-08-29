@@ -109,10 +109,11 @@ endfunc
 
 func bmk#EditFile(file, winnr=0)
   let file = bmk#util#abspath(a:file)
+  let dir = bmk#util#dirname(file)
+
   let winnr = vis#window#VisFindEditor(a:winnr)
   call vis#window#goto(winnr)
 
-  let dir = bmk#util#dirname(file)
   if &buftype == 'terminal'
     call bmk#EditDirInTerm(dir)
   else
