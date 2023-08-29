@@ -1,7 +1,11 @@
 "------------------------------------------------------
 " util
 "------------------------------------------------------
-func bmk#util#GetDirName(filepath)
+func bmk#util#abspath(filepath)
+  return fnamemodify(resolve(bmk#util#expand(a:filepath)), ':p')
+endfunc
+
+func bmk#util#dirname(filepath)
   let filepath = fnamemodify(expand(a:filepath), ':p')
   if (isdirectory(filepath))
     return filepath

@@ -33,11 +33,11 @@ func bmk#GetDirName(val)
   if type == "dir"
     let dir = val
   elseif type == "file"
-    let dir = bmk#util#GetDirName(val)
+    let dir = bmk#util#dirname(val)
   elseif type == "html"
-    let dir = bmk#util#GetDirName(val)
+    let dir = bmk#util#dirname(val)
   elseif type == "pdf"
-    let dir = bmk#util#GetDirName(val)
+    let dir = bmk#util#dirname(val)
   else
     let dir = ""
   endif
@@ -85,7 +85,7 @@ endfunc
 " internal open
 "------------------------------------------------------
 func bmk#EditDir(dir, winnr=0)
-  let dir = fnamemodify(resolve(bmk#util#expand(a:dir)), ':p')
+  let dir = bmk#util#abspath(a:dir)
 
   if filereadable(dir)
     let dir = fnamemodify(dir, ':h')
@@ -108,11 +108,11 @@ func bmk#EditDir(dir, winnr=0)
 endfunc
 
 func bmk#EditFile(file, winnr=0)
-  let file = fnamemodify(resolve(bmk#util#expand(a:file)), ':p')
+  let file = bmk#util#abspath(a:file)
   let winnr = vis#window#VisFindEditor(a:winnr)
   call vis#window#goto(winnr)
 
-  let dir = bmk#util#GetDirName(file)
+  let dir = bmk#util#dirname(file)
   if &buftype == 'terminal'
     call bmk#EditDirInTerm(dir)
   else
@@ -122,11 +122,11 @@ func bmk#EditFile(file, winnr=0)
 endfunc
 
 func bmk#EditPDF(file, winnr=0)
-  let file = fnamemodify(resolve(bmk#util#expand(a:file)), ':p')
+  let file = bmk#util#abspath(a:file)
   let winnr = vis#window#VisFindEditor(a:winnr)
   call vis#window#goto(winnr)
 
-  let dir = bmk#util#GetDirName(file)
+  let dir = bmk#util#dirname(file)
   if &buftype == 'terminal'
     call bmk#EditDirInTerm(dir)
   else
