@@ -57,25 +57,25 @@ endfunc
 "------------------------------------------------------
 " external open
 "------------------------------------------------------
-func bmk#OpenURL(url)
+func bmk#OpenURL(prg, url)
   let url = bmk#util#expand(a:url)
-  let cmd = printf("%s '%s'", g:bmk_open_url_prog, url)
+  let cmd = printf("%s '%s'", a:prg, url)
   echom cmd
   call system(cmd)
   redraw!
 endfunc
 
-func bmk#OpenDir(url)
+func bmk#OpenDir(prg, url)
   let url = bmk#util#expand(a:url)
-  let cmd = printf("%s '%s'", g:bmk_open_dir_prog, url)
+  let cmd = printf("%s '%s'", a:prg, url)
   echom cmd
   call system(cmd)
   redraw!
 endfunc
 
-func bmk#OpenFile(url)
+func bmk#OpenFile(prg, url)
   let url = bmk#util#expand(a:url)
-  let cmd = printf("%s '%s'", g:bmk_open_file_prog, url)
+  let cmd = printf("%s '%s'", a:prg, url)
   echom cmd
   call system(cmd)
   redraw!
@@ -187,17 +187,17 @@ func bmk#Open(url, winnr=0)
   let type = bmk#util#type(url)
 
   if (type == "http")
-    call bmk#OpenURL(url)
+    call bmk#OpenURL(g:bmk_open_url_prog, url)
   elseif (type == "network")
-    call bmk#OpenDir(url)
+    call bmk#OpenDir(g:bmk_open_dir_prog, url)
   elseif (type == "dir")
-    call bmk#OpenDir(url)
+    call bmk#OpenDir(g:bmk_open_dir_prog, url)
   elseif (type == "file")
-    call bmk#OpenFile(url)
+    call bmk#OpenFile(g:bmk_open_file_prog, url)
   elseif (type == "html")
-    call bmk#OpenFile(url)
+    call bmk#OpenFile(g:bmk_open_file_prog, url)
   elseif (type == "pdf")
-    call bmk#OpenURL(url)
+    call bmk#OpenURL(g:bmk_open_url_prog, url)
   elseif (type == "vim_command" || type == "vim_normal")
     call bmk#ExecVimCommand(url, a:winnr)
   elseif (type == "term_command")
@@ -215,17 +215,17 @@ func bmk#View(url, winnr=0)
   let type = bmk#util#type(url)
 
   if (type == "http")
-    call bmk#OpenURL(url)
+    call bmk#OpenURL(g:bmk_open_url_prog, url)
   elseif (type == "network")
-    call bmk#OpenDir(url)
+    call bmk#OpenDir(g:bmk_open_dir_prog, url)
   elseif (type == "dir")
-    call bmk#OpenDir(url)
+    call bmk#OpenDir(g:bmk_open_dir_prog, url)
   elseif (type == "file")
-    call bmk#OpenURL(url)
+    call bmk#OpenURL(g:bmk_open_url_prog, url)
   elseif (type == "html")
-    call bmk#OpenURL(url)
+    call bmk#OpenURL(g:bmk_open_url_prog, url)
   elseif (type == "pdf")
-    call bmk#OpenURL(url)
+    call bmk#OpenURL(g:bmk_open_url_prog, url)
   elseif (type == "vim_command" || type == "vim_normal")
     call bmk#ExecVimCommand(url, a:winnr)
   elseif (type == "term_command")
@@ -247,9 +247,9 @@ func bmk#Edit(url, winnr=0)
   endif
 
   if (type == "http")
-    call bmk#OpenURL(url)
+    call bmk#OpenURL(g:bmk_open_url_prog, url)
   elseif (type == "network")
-    call bmk#OpenDir(url)
+    call bmk#OpenDir(g:bmk_open_dir_prog, url)
   elseif (type == "dir")
     call bmk#EditDir(url, a:winnr)
   elseif (type == "file")
@@ -278,7 +278,7 @@ func bmk#OpenThis()
 
   let r = bmk#Open(val, 0)
   if !r
-    call bmk#OpenFile('%:p')
+    call bmk#OpenFile(g:bmk_open_file_prog, '%:p')
   endif
 endfunc
 
@@ -287,7 +287,7 @@ func bmk#ViewThis()
 
   let r = bmk#View(val, 0)
   if !r
-    call bmk#OpenURL('%:p')
+    call bmk#OpenURL(g:bmk_open_url_prog, '%:p')
   endif
 endfunc
 
