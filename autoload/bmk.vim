@@ -87,21 +87,12 @@ endfunc
 func bmk#EditDir(dir, winnr=0)
   let dir = bmk#util#abspath(a:dir)
 
-  if filereadable(dir)
-    let dir = fnamemodify(dir, ':h')
-  endif
-
-  if !isdirectory(dir)
-    echom printf('not directory: %s', dir)
-    return
-  endif
-
   call vis#window#goto(a:winnr)
 
   if &buftype == 'terminal'
     call bmk#EditDirInTerm(dir)
   else
-    if g:bmk_edit_dir_func != ""
+    if g:bmk_edit_dir_func != ''
       exec printf('call %s("%s")', g:bmk_edit_dir_func, dir)
     endif
   endif
