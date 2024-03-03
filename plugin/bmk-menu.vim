@@ -9,6 +9,7 @@ call cpm#init()
 "------------------------------------------------------
 " command
 "------------------------------------------------------
+command! -nargs=+ BmkEditWinbuf call bmk#item#EditWinbuf(<f-args>)
 command! -nargs=+ BmkEditDir   call bmk#EditDir(<f-args>)
 command! -nargs=+ BmkEditFile  call bmk#EditFile(<f-args>)
 command! -nargs=+ BmkOpenItem  call bmk#item#OpenItem(0, <f-args>)

@@ -24,13 +24,13 @@ func bmk#item#GetItem(line, idx)
   return item
 endfunc
 
-" return "shortcut key"
+" return key
 func bmk#item#GetKeyItem()
   let line = getline('.')
   return bmk#item#GetItem(line, 2)
 endfunc
 
-" return "val"
+" return val
 func bmk#item#GetValueItem()
   let line = getline('.')
   return bmk#item#GetItem(line, 3)
@@ -110,3 +110,9 @@ func bmk#item#PreviewItem(winnr=0)
   exec prev_winnr."wincmd w"
 endfunc
 
+"------------------------------------------------------
+func bmk#item#EditWinbuf(line='')
+  let lst = split(a:line)
+  let bufnr = lst[0]
+  exec printf("%db", bufnr)
+endfunc
